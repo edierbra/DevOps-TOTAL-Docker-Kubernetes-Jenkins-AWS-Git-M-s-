@@ -75,3 +75,15 @@ sudo add-apt-repository "deb https://download.sublimetext.com/ apt/stable/"
 sudo apt install sublime-text
 ```
 
+## Seccion 4: Maquina virtual, Vagrant y Servidores
+
+### Virtualizacion
+
+permite crear multiple computadoras logicas en un mismo disposi6tivo fisico.
+
+- Host OS: sistema operativo de la maquina fisica.
+- Gueste OS: sistema operativo de la maquina virtual.
+- VM: maquina virtual
+- Snapshot: BackUp d ela maquina virtual
+- Hypervisor: habilita la virtualizacion y permite la creacion de VM. Tipo 1 o Bare metal que correo como OS y solo se usa para produccion. Tipo 2 que corre como software, solo es para aprendizaje y testeo.
+
