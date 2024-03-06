@@ -104,3 +104,5 @@ Permite crear multiple computadoras logicas en un mismo disposi6tivo fisico.
 Para apagar la VM `vagrant halt`
 Para borrar la VM `vagrant destroy`
 para reiniciar la VM `vagrant reload`
+
+Carpetas de sincronizacion, añadir `config.vm.synced_folder "F:\\vagrant-vms\\shellsscripts", "/vagrant_data"`en el vagrantfile, donde se especifica la ruta host y la ruta en el guest.
