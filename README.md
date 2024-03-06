@@ -37,34 +37,40 @@ sudo apt install virtualbox
 
 Install Vagrant
 
-```curl -O https://releases.hashicorp.com/vagrant/2.2.9/vagrant_2.2.9_x86_64.deb
+```
+curl -O https://releases.hashicorp.com/vagrant/2.2.9/vagrant_2.2.9_x86_64.deb
 sudo apt install ./vagrant_2.2.9_x86_64.deb
 ```
 
 Install Git
 
-`apt install git
-`
+```
+apt install git
+```
 
 Install jdk8
 
-`sudo apt-get install openjdk-8-jdk
-`
+```
+sudo apt-get install openjdk-8-jdk
+```
 
 Install Maven
 
-`sudo apt-get install maven
-`
+```
+sudo apt-get install maven
+```
 
 Install awscli
 
-`sudo apt-get install awscli
-`
+```
+sudo apt-get install awscli
+```
 
 Install Intellij community
 
-`sudo snap install intellij-idea-community --classic
-`
+```
+sudo snap install intellij-idea-community --classic
+```
 
 Install Sublime Text
 
@@ -79,7 +85,7 @@ sudo apt install sublime-text
 
 ### Virtualizacion
 
-permite crear multiple computadoras logicas en un mismo disposi6tivo fisico.
+Permite crear multiple computadoras logicas en un mismo disposi6tivo fisico.
 
 - Host OS: sistema operativo de la maquina fisica.
 - Gueste OS: sistema operativo de la maquina virtual.
@@ -87,3 +93,14 @@ permite crear multiple computadoras logicas en un mismo disposi6tivo fisico.
 - Snapshot: BackUp d ela maquina virtual
 - Hypervisor: habilita la virtualizacion y permite la creacion de VM. Tipo 1 o Bare metal que correo como OS y solo se usa para produccion. Tipo 2 que corre como software, solo es para aprendizaje y testeo.
 
+### Configuracion de VM's con Vagrant (Automatizacion)
+
+- Encontrar nombre para Box en la nube vagrant (vagrant cloud). Por ejemplo, "geerlingguy/centos7".
+- Crear un directorio de proyectos (una carpeta)
+- Crear Vagranfile en el directorio de proyectos `vagrant init geerlingguy/centos7`
+- Comandos de Vagrant como `vagrant up`
+- Iniciar sesion con `vagrant ssh` para las VMs de Linux
+
+Para apagar la VM `vagrant halt`
+Para borrar la VM `vagrant destroy`
+para reiniciar la VM `vagrant reload`
