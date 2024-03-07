@@ -105,7 +105,13 @@ Para apagar la VM `vagrant halt`
 Para borrar la VM `vagrant destroy`
 para reiniciar la VM `vagrant reload`
 
-Carpetas de sincronizacion, añadir `config.vm.synced_folder "F:\\vagrant-vms\\shellsscripts", "/vagrant_data"`en el vagrantfile, donde se especifica la ruta host y la ruta en el guest.
+#### Carpeta compartida o de sincronizacion
+
+Tener encvuenta que todo lo que tengamos en el directorio de trabajo en el host, se vera en lamcarpeta *vagrant* en el guest.
+
+Para crear la carpeta de sincronizacion, añadir `config.vm.synced_folder "F:\\vagrant-vms\\shellsscripts", "/vagrant_data"`en el vagrantfile, donde se especifica la ruta host y la ruta en el guest.
+
+Para acceder a la carpeta de sincronizacion, ejecutar `cd /vagrant_data` en el guest, se observara todo lo que este en *F:\\vagrant-vms\\shellsscripts*. 
 
 #### Aprovicionamiento en Vagrant
 
@@ -119,3 +125,6 @@ config.vm.provision "shell", inline: <<-SHELL
      uptime
    SHELL
 ```
+
+#### Administracion de servidores
+
