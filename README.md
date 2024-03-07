@@ -106,3 +106,16 @@ Para borrar la VM `vagrant destroy`
 para reiniciar la VM `vagrant reload`
 
 Carpetas de sincronizacion, añadir `config.vm.synced_folder "F:\\vagrant-vms\\shellsscripts", "/vagrant_data"`en el vagrantfile, donde se especifica la ruta host y la ruta en el guest.
+
+#### Aprovicionamiento en Vagrant
+
+Colocar los comandos que queramos dentro de los dos SHELL y luego ejecutar `vagrant reload --provision`
+
+```
+config.vm.provision "shell", inline: <<-SHELL
+     yum install httpd wget unzip -y
+     mkdir /opt/devopsdir
+     free -m
+     uptime
+   SHELL
+```
