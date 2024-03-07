@@ -105,6 +105,10 @@ Para apagar la VM `vagrant halt`
 Para borrar la VM `vagrant destroy`
 para reiniciar la VM `vagrant reload`
 
+**Configuracion de red:**
+Red privada `config.vm.network "private_network", ip: "192.168.33.10"`
+Red publica o nat `config.vm.network "public_network"`
+
 #### Carpeta compartida o de sincronizacion
 
 Tener encvuenta que todo lo que tengamos en el directorio de trabajo en el host, se vera en lamcarpeta *vagrant* en el guest.
@@ -128,3 +132,17 @@ config.vm.provision "shell", inline: <<-SHELL
 
 #### Administracion de servidores
 
+Instalar los paquetes HTTPD, wget y unzip
+
+```
+yum install httpd wget unzip
+```
+
+Habilitar httpd. Una vez habilitado se podra acceder a la pagina por defecto en el navegador mediante la ip privada.
+
+```
+systemctl start httpd
+systemctl enable httpd
+```
+
+Si queremos crear una nueva pagina web debemos colocar todos los archivos en */var/www/html*. Para esto podemos usar los comandos wget, unzip si tenemos un template en internet para descargar, el link de descarga se optiene en la pestaña de red de la herramientas de desarrollador.
