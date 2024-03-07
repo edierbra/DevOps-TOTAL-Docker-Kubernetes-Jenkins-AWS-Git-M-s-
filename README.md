@@ -134,6 +134,8 @@ config.vm.provision "shell", inline: <<-SHELL
 
 Instalar los paquetes HTTPD, wget y unzip
 
+##### HTTPD
+
 ```
 yum install httpd wget unzip
 ```
@@ -146,3 +148,8 @@ systemctl enable httpd
 ```
 
 Si queremos crear una nueva pagina web debemos colocar todos los archivos en */var/www/html*. Para esto podemos usar los comandos wget, unzip si tenemos un template en internet para descargar, el link de descarga se optiene en la pestaña de red de la herramientas de desarrollador.
+
+##### WordPress
+
+Instalar dependencias y wordpress siguienedo el siguiente [Link](https://ubuntu.com/tutorials/install-and-configure-wordpress#1-overview)
+
