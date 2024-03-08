@@ -115,7 +115,7 @@ Tener encvuenta que todo lo que tengamos en el directorio de trabajo en el host,
 
 Para crear la carpeta de sincronizacion, añadir `config.vm.synced_folder "F:\\vagrant-vms\\shellsscripts", "/vagrant_data"`en el vagrantfile, donde se especifica la ruta host y la ruta en el guest.
 
-Para acceder a la carpeta de sincronizacion, ejecutar `cd /vagrant_data` en el guest, se observara todo lo que este en *F:\\vagrant-vms\\shellsscripts*. 
+Para acceder a la carpeta de sincronizacion, ejecutar `cd /vagrant_data` en el guest, se observara todo lo que este en *F:\\vagrant-vms\\shellsscripts*.
 
 #### Aprovicionamiento en Vagrant
 
@@ -152,4 +152,3 @@ Si queremos crear una nueva pagina web debemos colocar todos los archivos en */v
 ##### WordPress
 
 Instalar dependencias y wordpress siguienedo el siguiente [Link](https://ubuntu.com/tutorials/install-and-configure-wordpress#1-overview)
-
