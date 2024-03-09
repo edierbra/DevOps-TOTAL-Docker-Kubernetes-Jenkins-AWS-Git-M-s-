@@ -226,17 +226,25 @@ vagarn reload web01
 
 `git status` estado de git
 
-`git add file1`, `git add .` o `git add -A` agrega archivos al area de preparacion
+`git add file1`, `git add .` o `git add -A` agrega archivos al area de preparacion.
 
-`git commit file1 -m "Descripcion"` o `git commit -m "Descripcion"` agrega cambios al repositorio local
+`git commit file1 -m "Descripcion"` o `git commit -m "Descripcion"` agrega cambios al repositorio local.
 
-`git log` muestra historial de commits
+`git log` muestra historial de commits.
 
-`git log --oneline` muestra historial de commits en una linea
+`git log --all` muestra todo el historial de commits.
+
+`git log --graph` muestra todo el historial de commits graficamente.
+
+`git log --oneline` muestra historial de commits en una linea.
+
+`git log --merged` ver ramas fusionadas.
+
+`git log --no-merged` ver ramas  no fusionadas.
 
 `git remote add origin url_https` agrega repositorio remoto por https.
 
-`git remote add origin url_ssh` agrega repositorio remoto por ssh
+`git remote add origin url_ssh` agrega repositorio remoto por ssh.
 
 `git diff` muestra cambios realizados
 
@@ -258,7 +266,7 @@ vagarn reload web01
 
 `git branch -r` ver ramas del repositorio remoto.
 
-`git fetch` sincroniza el repositorio local con el remoto.
+`git fetch origin` sincroniza el repositorio local con el remoto.
 
 `git pull origin nombre_rama_remota` trae los datros de la rama *nombre_rama_remota* a la rama local.
 
