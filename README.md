@@ -10,7 +10,8 @@ Instalar chocolatey desde las instrucciones dadas en este [Link](https://chocola
 
 Ejecutar todos los comandos a continuación en Powershell (Abrir Powershell como Administrador)
 
-```choco install virtualbox
+```cosole
+choco install virtualbox
 
 choco install vagrant
 
@@ -31,50 +32,52 @@ choco install sublimetext3.app
 
 Install Virtualbox
 
-```sudo apt update
+```cosole
+sudo apt update
 sudo apt install virtualbox
 ```
 
 Install Vagrant
 
-```
+```cosole
 curl -O https://releases.hashicorp.com/vagrant/2.2.9/vagrant_2.2.9_x86_64.deb
 sudo apt install ./vagrant_2.2.9_x86_64.deb
 ```
 
 Install Git
 
-```
+```cosole
 apt install git
 ```
 
 Install jdk8
 
-```
+```cosole
 sudo apt-get install openjdk-8-jdk
 ```
 
 Install Maven
 
-```
+```cosole
 sudo apt-get install maven
 ```
 
 Install awscli
 
-```
+```cosole
 sudo apt-get install awscli
 ```
 
 Install Intellij community
 
-```
+```cosole
 sudo snap install intellij-idea-community --classic
 ```
 
 Install Sublime Text
 
-```sudo apt update
+```cosole
+sudo apt update
 sudo apt install dirmngr gnupg apt-transport-https ca-certificates software-properties-common
 curl -fsSL https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -
 sudo add-apt-repository "deb https://download.sublimetext.com/ apt/stable/"
@@ -121,7 +124,7 @@ Para acceder a la carpeta de sincronizacion, ejecutar `cd /vagrant_data` en el g
 
 Colocar los comandos que queramos dentro de los dos SHELL y luego ejecutar `vagrant reload --provision`
 
-```
+```cosole
 config.vm.provision "shell", inline: <<-SHELL
      yum install httpd wget unzip -y
      mkdir /opt/devopsdir
@@ -136,13 +139,13 @@ Instalar los paquetes HTTPD, wget y unzip
 
 ##### HTTPD
 
-```
+```cosole
 yum install httpd wget unzip
 ```
 
 Habilitar httpd. Una vez habilitado se podra acceder a la pagina por defecto en el navegador mediante la ip privada.
 
-```
+```cosole
 systemctl start httpd
 systemctl enable httpd
 ```
@@ -157,7 +160,7 @@ Instalar dependencias y wordpress siguienedo el siguiente [Link](https://ubuntu.
 
 Configuracion de ejemplo para dos VMs en un solo Vagrantfile, parea mayor informacion ver la [Documentacion de Vagrant](https://developer.hashicorp.com/vagrant/docs/multi-machine)
 
-```
+```cosole
 Vagrant.configure("2") do |config|
     config.vm.provision "shell", inline: "echo Hello"
   
@@ -206,7 +209,7 @@ Vagrant.configure("2") do |config|
 
 para ejecutar comandos a una VM debemos especificar el nombre de la VM, por ejemplo:
 
-```
+```cosole
 vagrant destroy web01
 vagrant ssh web01
 vagarn reload web01
@@ -219,21 +222,23 @@ vagarn reload web01
 
 ## Seccion 6: Git & GitHub Principios basicos
 
-Iniciar git `git init`
+`git init` iniciar git.
 
-Estado `git status`
+`git status` estado de git
 
-Agregar archivos al area de preparacion `git add file1`, `git add .` o `git add -A`
+`git add file1`, `git add .` o `git add -A` agrega archivos al area de preparacion
 
-Agregar cambios al repositorio local `git commit file1 -m "Descripcion"` o `git commit -m "Descripcion"`
+`git commit file1 -m "Descripcion"` o `git commit -m "Descripcion"` agrega cambios al repositorio local
 
-Ver historial de commits `git log`
+`git log` muestra historial de commits
 
-agregar repositorio remoto por https `git remote add origin url_https`
+`git log --oneline` muestra historial de commits en una linea
 
-Agregar repositorio remoto por ssh `git remote add origin url_ssh`
+`git remote add origin url_https` agrega repositorio remoto por https.
 
-Cambios realizados `git diff`
+`git remote add origin url_ssh` agrega repositorio remoto por ssh
+
+`git diff` muestra cambios realizados
 
 ### Ramificacion y fusion
 
@@ -247,7 +252,7 @@ Cambios realizados `git diff`
 
 `git branch nombre_rama2 nombre_rama1` crea una nueva rama *nombre_rama2* a partir de *nombre_rama1* pero el head se queda en la rama donde se hizo el comando.
 
-### Clonar, Fusionar y Sincronizar.
+### Clonar, Fusionar y Sincronizar
 
 `git clone url_repositorio` clona un repositorio remoto.
 
@@ -258,3 +263,4 @@ Cambios realizados `git diff`
 `git pull origin nombre_rama_remota` trae los datros de la rama *nombre_rama_remota* a la rama local.
 
 `git branch -M nuevo_nombre` renombra la rama *master* a *main*.
+
