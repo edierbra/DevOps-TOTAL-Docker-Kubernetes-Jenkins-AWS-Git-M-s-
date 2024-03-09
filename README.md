@@ -155,7 +155,7 @@ Instalar dependencias y wordpress siguienedo el siguiente [Link](https://ubuntu.
 
 #### Varias VM con un solo Vagrantfile
 
-Configuracion de ejemplo para dos VMs en un solo Vagrantfile
+Configuracion de ejemplo para dos VMs en un solo Vagrantfile, parea mayor informacion ver la [Documentacion de Vagrant](https://developer.hashicorp.com/vagrant/docs/multi-machine)
 
 ```
 Vagrant.configure("2") do |config|
@@ -211,3 +211,9 @@ vagrant destroy web01
 vagrant ssh web01
 vagarn reload web01
 ```
+
+## Seccion 5: Redes
+
+- [Comandos windows](https://openwebinars.net/blog/20-comandos-de-red-mas-importantes-en-windows/)
+- [Comandos ubuntu](https://aprenderlinux.org/los-20-principales-comandos-de-red-de-linux/)
+
