@@ -231,4 +231,7 @@ Ver historial de commits `git log`
 
 agregar repositorio remoto por https `git remote add origin url_https`
 
-agregar repositorio remoto por ssh `git remote add origin url_ssh`
+Agregar repositorio remoto por ssh `git remote add origin url_ssh`
+
+
+Cambios realizados `git diff`
