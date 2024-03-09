@@ -301,4 +301,23 @@ Si el repositorio  original esta por delante de tu repositorio en tu cuante:
 
 - `git remote add upstream url_repositorio_principal`, `git fetch upstream`, nos movemos a la rama local deseada `git switch main`, hacemos merge `git merge upstream/main`, actualizamos nuestro repositorio forkeado `git push origin`.
 
-## Conflictos
+### Gitignore
+
+Crear archivo *.gitignore* y colocar lo que quremos ignorar en git:
+
+- log\
+- log\file.txt
+- *.xslx
+- file.xslx
+
+### Issues
+
+Para mandar solicitudes de modificacion a laos colaboradores del proyecto.
+
+### Integraciones
+
+Existe integraciones con Discord y Jenkins.
+
+### GitFlow
+
+![GitFlow](/imgs/gitflow.png)
