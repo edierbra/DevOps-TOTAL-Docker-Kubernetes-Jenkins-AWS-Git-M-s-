@@ -272,3 +272,14 @@ vagarn reload web01
 
 `git branch -M nuevo_nombre` renombra la rama *master* a *main*.
 
+### Explorando el Historial y los Commits
+
+**Git Graph** es una extencion de VS para ver las ramas visualmente
+
+`git show id_commit` muestra los detalles de un commit.
+
+`git show id_commit:nombre_archivo` muestra los detalles de un archivo en un determinado commit.
+
+`git log --oneline --all -stat` muestra los archivos modificados.
+
+`git ls-tree id_commit` muestra los nombre de los archivos en un determinado commit.
