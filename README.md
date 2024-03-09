@@ -219,3 +219,5 @@ vagarn reload web01
 
 ## Seccion 6: Git & GitHub Principios basicos
 
+Iniciar git `git init`
+Estado `git status`
