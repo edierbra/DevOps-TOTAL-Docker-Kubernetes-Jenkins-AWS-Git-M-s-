@@ -247,3 +247,14 @@ Cambios realizados `git diff`
 
 `git branch nombre_rama2 nombre_rama1` crea una nueva rama *nombre_rama2* a partir de *nombre_rama1* pero el head se queda en la rama donde se hizo el comando.
 
+### Clonar, Fusionar y Sincronizar.
+
+`git clone url_repositorio` clona un repositorio remoto.
+
+`git branch -r` ver ramas del repositorio remoto.
+
+`git fetch` sincroniza el repositorio local con el remoto.
+
+`git pull origin nombre_rama_remota` trae los datros de la rama *nombre_rama_remota* a la rama local.
+
+`git branch -M nuevo_nombre` renombra la rama *master* a *main*.
