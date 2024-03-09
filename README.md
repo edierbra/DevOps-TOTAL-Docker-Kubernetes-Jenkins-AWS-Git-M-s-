@@ -283,3 +283,5 @@ vagarn reload web01
 `git log --oneline --all -stat` muestra los archivos modificados.
 
 `git ls-tree id_commit` muestra los nombre de los archivos en un determinado commit.
+
+`rm file1` y `git add .` es igual a `git rm file1`
