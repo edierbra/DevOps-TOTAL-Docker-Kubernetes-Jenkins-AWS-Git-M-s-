@@ -221,3 +221,8 @@ vagarn reload web01
 
 Iniciar git `git init`
 Estado `git status`
+Agregar archivos al area de preparacion `git add file1`, `git add .` o `git add -A`
+Agregar cambios al repositorio local `git commit file1 -m "Descripcion"` o `git commit -m "Descripcion"`
+Ver historial de commits `git log`
+agregar repositorio remoto por https `git remote add origin url_https`
+agregar repositorio remoto por ssh `git remote add origin url_ssh`
