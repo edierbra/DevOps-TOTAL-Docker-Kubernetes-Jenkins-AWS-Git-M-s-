@@ -320,4 +320,4 @@ Existe integraciones con Discord y Jenkins.
 
 ### GitFlow
 
-![GitFlow](/imgs/gitflow.png)
+![GitFlow](/git-github/imgs/gitflow.png)
