@@ -233,5 +233,17 @@ agregar repositorio remoto por https `git remote add origin url_https`
 
 Agregar repositorio remoto por ssh `git remote add origin url_ssh`
 
-
 Cambios realizados `git diff`
+
+### Ramificacion y fusion
+
+`git branch nombre_rama` Crear una rama.
+
+`git switch nombre_rama` o `git checkout nombre_rama` cambiar de rama.
+
+`git merge nombre_rama` fusiona los cambios de la rama *nombre_rama* a la rama actual.
+
+`git branch -d nombre_rama` elimina una rama.
+
+`git branch nombre_rama2 nombre_rama1` crea una nueva rama *nombre_rama2* a partir de *nombre_rama1* pero el head se queda en la rama donde se hizo el comando.
+
