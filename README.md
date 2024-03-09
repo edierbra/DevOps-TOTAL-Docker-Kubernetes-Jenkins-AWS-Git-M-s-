@@ -285,3 +285,20 @@ vagarn reload web01
 `git ls-tree id_commit` muestra los nombre de los archivos en un determinado commit.
 
 `rm file1` y `git add .` es igual a `git rm file1`
+
+### Fork
+
+- Hacer Fork repositorio, lo que crea un nuevpo repositorio en tu cuenta
+- Hacer clone al repositorio creado en tu cuenta
+- Hacer modificaciones
+- Hacer push al repositorio en tu cuenta
+- Hacer pull request
+- Esperar que el propietario del repositorio original verifique los cambios y acepte el pull request
+
+Si el repositorio  original esta por delante de tu repositorio en tu cuante:
+
+- Clickear la opcion *Sunc fork* para fucionar los cambios. Para tener los cambios localmente hacer `git pull`.
+
+- `git remote add upstream url_repositorio_principal`, `git fetch upstream`, nos movemos a la rama local deseada `git switch main`, hacemos merge `git merge upstream/main`, actualizamos nuestro repositorio forkeado `git push origin`.
+
+## Conflictos
