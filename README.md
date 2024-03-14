@@ -438,7 +438,9 @@ Se crea un archivo de docker llamado **dockerfile** y escribimos las intruciones
 
 `docker build . -f Dockerfile -t CursoDockerr/my-custom-app` construye una image a partir del Dockerfile.
 
-`docker push Cursodockerr/my-custom-app` Publica el contenedor en docker Hub.
+`docker tag ubuntu:platzi edierbra/ubuntu:platzi` cambia el tag a una imagen.
+
+`docker push Cursodockerr/my-custom-app` Publica el contenedor en docker Hub. Tener encuenta que antes se debe iniciar sesion con `docker login`
 
 Estructura del dockerfile:
 
@@ -448,3 +450,5 @@ Estructura del dockerfile:
 - `ENTRYPOINT` permite especificar un comando a ejecutar cuando la imagen se ejecute como un contenedor.
 
 `docker history Cursodockerr/my-custom-app` para observar los detalles al construir una imagen con dockerfile.
+
+Al construir la imagen se podran ver las capas, si hay un error docker no construye todo de nuevo, sino desde la capa que ocurrio el error.
