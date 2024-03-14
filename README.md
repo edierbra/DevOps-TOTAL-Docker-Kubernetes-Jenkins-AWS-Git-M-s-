@@ -408,6 +408,7 @@ Seguir el suguiente tutorial de [Docker Docs](https://docs.docker.com/desktop)
   - `-i` bandera para correr un contenedor en modo interactivo.
   - `-t` bandera para conectarse a la terminal del contenedor.
   - `-d` bandera para correr un contenedor en el bacground.
+- `docker run --CPUS=.5 --memory=100m ubuntu` limita el numero de cpus y memoria usados por el contenedor.
 
 ### Mapeo de puertos
 
