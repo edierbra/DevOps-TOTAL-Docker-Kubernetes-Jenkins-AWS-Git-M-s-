@@ -375,3 +375,76 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 # Verify that the Docker Engine installation:
 sudo docker run hello-world
 ```
+
+## Secsion 11: Docker en Windows
+
+### Instalacion de docker en windows
+
+Seguir el suguiente tutorial de [Docker Docs](https://docs.docker.com/desktop)
+
+## Seccion 12: Docker: Comandos
+
+- `docker run <nombre de la imagen>` ejecuta un contenedor ya sea localmente o de docker hub.
+- `docker ps` lista los contenedores en funcionamiento.
+- `docker ps -a` lista los contenedores en y no funcionamiento.
+- `docker stop <id o nombre del contendor>` Detiene el contenedor.
+- `docker rm <id o nombre del contendor>` elimina permanentemente un contenedor detenido o en salida. Se pueden eliminar varios si colocamos varios en la lista.
+- `docker images` lista todas la simagenes disponibles.
+- `docker pull <nombre de la imagen>` descarga una imagen de docker hub para luego poderla usar.
+- `docker rmi <nombre de la imagen>` elimina una imagen, pero esta no debe estar utilizada por un contenedor.
+- `docker exec <nombre del contenedor> <comando>` permite ejecutar un comando en el contenedor.
+- `docker attach <id o nombre de docker>` adjunta de vuerlta al contenedor en ejecucion.
+
+## Seccion 13: Docker: Comando Run
+
+### Docker run
+
+- `docker run <nombre de la imagen>` ejecuta un contenedor ya sea localmente o de docker hub.
+- `docker run <Nombre de la imagen>:<version>` ejecura una imagen con una version determinada, la version por defecto es *latest*.
+- `docker run ubuntu sleep 5` elcontenedor se manteine en suspencion por 5 segundos y luego se cierra.
+- `docker run CursoDockerr/appweb` ejecuta una imagen personalizada para una apk web, se ejecuta en primer plano o de forma adjunta y estara conectado a la consola o por fuera del contenedor docker pudiendo ver la salida.
+- `docker run -d CursoDockerr/appweb` ejecuta en el backend una imagen personalizada para una apk web.
+- Banderas despues del run:
+  - `-i` bandera para correr un contenedor en modo interactivo.
+  - `-t` bandera para conectarse a la terminal del contenedor.
+  - `-d` bandera para correr un contenedor en el bacground.
+
+### Mapeo de puertos
+
+- `docker run -p <puerto del host de docker>:<puerto del contenedor de docker> CursoJenkis0/appweb`, el usuario podra acceder a la palicacion en la URL `http://<ip del contenedor>:<puerto del host de docker>`. El `<puerto del host de docker>` debe estar libre.
+
+### Datos en Docker
+
+- `docker run -v <directorio del host>:<directorio del contenedor>` configura un volumen en un contenedor. Por ejemplo, `docker run -v /opt/datadir:/var/lib/mysql mysql` guarda el contendido  **/var/lib/mysql mysql** en el volumen exterior **/opt/datadir**.
+
+- `docker inspect <nombre o id del contenedor>` permite inspeccionar un contenedor.
+
+- `docker logs <id o nombre del contenedor>` permite ver los registros de un contenedor ejecutado en segundo plano.
+
+## Seccion 14: Docker imagenes
+
+### Crear una imagen
+
+Pasos para crear una imagen de una App web de forma manual:
+
+- Comenzar con un sistema operativo como Ubuntu
+- Actualizar los repositorios de origen con el comando apt
+- Instalar dependecias con el comando apt
+- Instalar dependencias de python usando el comando pip
+- Copiar el codigo fuente de mi aplicacion a una ubicacion como una carpeta apt
+- ejecutar el servidor web usando el comando flask
+
+Se crea un archivo de docker llamado **dockerfile** y escribimos las intruciones para configurar la app.
+
+`docker build . -f Dockerfile -t CursoDockerr/my-custom-app` construye una image a partir del Dockerfile.
+
+`docker push Cursodockerr/my-custom-app` Publica el contenedor en docker Hub.
+
+Estructura del dockerfile:
+
+- `FROM` define el sistema operativo del contenedor.
+- `RUN` indica comandos en particular que se deben ejecutar en la imagen base.
+- `COPY` copia los archivos locales al contenedor.
+- `ENTRYPOINT` permite especificar un comando a ejecutar cuando la imagen se ejecute como un contenedor.
+
+`docker history Cursodockerr/my-custom-app` para observar los detalles al construir una imagen con dockerfile.
