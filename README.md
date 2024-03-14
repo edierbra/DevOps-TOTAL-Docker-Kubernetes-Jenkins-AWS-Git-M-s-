@@ -452,3 +452,140 @@ Estructura del dockerfile:
 `docker history Cursodockerr/my-custom-app` para observar los detalles al construir una imagen con dockerfile.
 
 Al construir la imagen se podran ver las capas, si hay un error docker no construye todo de nuevo, sino desde la capa que ocurrio el error.
+
+## Seccion 15: Docker Compose y Registros
+
+Ejemplo apk de votacion:
+
+- `docker build . -t voting-app` construir la imagen de el frontend.
+- `docker run -d --name redis redis` ejecutar un contendor de redis para la db.
+- `docker run -d --name=db -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres postgres:9.4` ejecutar el contenedor de postgress.
+- `docker run -p 5000:80 --link redis:redis voting-app` construir el contenedor del frontend y enlazarlo con redis.
+
+Ejemplo apk de resultados de la apk de votacion:
+
+- `docker build . -t worker-app` construir la imagen worker-app
+- `docker run --link redis:redis --link db:db worker-app` construir el contenedor worker-app y enlazarlo con redis y db.
+- `docker build . -t result-app`construir la imagen del frontend de la apk de resultados.
+- `docker run -p 5001:80 --link db:db result-app`ejecutar la imagen del frontend de resultados y enlazarlo con db.
+
+### Docker Compose
+
+Ejemplo simple:
+
+```console
+version: '3'
+
+services:
+  redis:
+    image: redis
+
+  db:
+    image: postgres:9.4
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+
+  vote:
+    image: voting-app
+    ports:
+      - "5000:80"
+    links:
+      - redis
+
+  worker:
+    image: worker-app
+    links:
+      - redis
+      - db
+
+  result:
+    image: result-app
+    ports:
+      - "5001:80"
+    links:
+      - db
+```
+
+Ejemplo completo:
+
+```console
+# version is now using "compose spec"
+# v2 and v3 are now combined!
+# docker-compose v1.27+ required
+
+services:
+  vote:
+    build: ./vote
+    # use python rather than gunicorn for local dev
+    command: python app.py
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+     - ./vote:/app
+    ports:
+      - "5000:80"
+    networks:
+      - front-tier
+      - back-tier
+
+  result:
+    build: ./result
+    # use nodemon rather than node for local dev
+    command: nodemon server.js
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./result:/app
+    ports:
+      - "5001:80"
+      - "5858:5858"
+    networks:
+      - front-tier
+      - back-tier
+
+  worker:
+    build:
+      context: ./worker
+    depends_on:
+      redis:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    networks:
+      - back-tier
+
+  redis:
+    image: redis:5.0-alpine3.10
+    volumes:
+      - "./healthchecks:/healthchecks"
+    healthcheck:
+      test: /healthchecks/redis.sh
+      interval: "5s"
+    ports: ["6379"]
+    networks:
+      - back-tier
+
+  db:
+    image: postgres:9.4
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    volumes:
+      - "db-data:/var/lib/postgresql/data"
+      - "./healthchecks:/healthchecks"
+    healthcheck:
+      test: /healthchecks/postgres.sh
+      interval: "5s"
+    networks:
+      - back-tier
+
+volumes:
+  db-data:
+
+networks:
+  front-tier:
+  back-tier:
+```

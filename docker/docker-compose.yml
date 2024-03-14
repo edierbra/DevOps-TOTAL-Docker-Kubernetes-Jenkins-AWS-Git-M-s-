@@ -1,0 +1,34 @@
+# version is now using "compose spec"
+# v2 and v3 are now combined!
+# docker-compose v1.27+ required
+version: '3'
+
+services:
+  redis:
+    image: redis
+
+  db:
+    image: postgres:9.4
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+
+  vote:
+    image: voting-app
+    ports:
+      - "5000:80"
+    links:
+      - redis
+
+  worker:
+    image: worker-app
+    links:
+      - redis
+      - db
+
+  result:
+    image: result-app
+    ports:
+      - "5001:80"
+    links:
+      - db
