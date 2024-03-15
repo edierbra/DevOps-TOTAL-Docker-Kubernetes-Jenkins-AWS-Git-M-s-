@@ -631,13 +631,19 @@ Existen varios orkestadores:
 - Docker swarm:
   - Facil de configurar e iniciar.
   - No tiene funciones avanzadas de auto escalas.
+  - Menor uso de recursos.
+  - Pensado para los desarrolladores.
+  - Seguridad desde el comienzo.
+  - Mas facil de resolver cualquier problema.
 - Mesos:
   - Dificil de configurar e iniciar.
   - Admite algunas opciones avanzadas.
 - Kubernetes:
+  - Muchos tipos de uso
   - Un poco dificil de configurar e iniciar
   - Muchas opciones para configurar el despliegue, soporte para proveedores.
   - compatible con todos los proveedores de servicios en la nube.
+  - Cubre mas casos extremos que Swarm.
 
 ## Seccion 20: Docker Swarm
 
@@ -652,11 +658,32 @@ Configuracion:
 - `docker swarm init` en el administrador swarm.
 - `docker swarm join --token <token>` en los nodos trabajadores.
 
-### Kubernetes
+## Seccion 21: Kubernetes - Introduccion y Teoria
 
-Utiliza los host de docker para alojar apps en forma de contenedores.
+Utiliza los host de docker para alojar apps en forma de contenedores. Es utilizada para organizar la impementacion y administracion de miles de contenedores en un entorno en cluster.
 
-#### Comandos iniciales
+### Conceptos basicos
+
+- Nodos: Maquina fisica o virtual en la que un soffware de Kubernetes instala las herramientas.  Es una maquina de trabajo donde se lanzan los contenedores.
+- Cluster: grupo de nodos agrupados. Si un nodo falla se puede acceder a otro.
+- Maestro: Nodo con los componentes del plano de kubernetes ya instalados.
+  - Vigila los nodos del grupo y orquesta los contenedores de los nodos trabajadores.
+  - Tiene el **servidor API**, **Scheduler o Programador**, **Controlador**, **Servicio Etcd** y **Core DNS**.
+- Trabajadores o Minios: es donde se alojan los contenedores. Por ejemplo, contenedores Docker.
+  - Para ejecutar estos contenedores es necesario que se instale el **runtime**, en este caso docker.
+  - tienen el ajente **kubelet**, el cual interactua con el maestro para proporcionar informacion vital del nodo trabajador y llevar las acciones solicitradas por el maestro en los minions.
+
+### Componentes basicos
+
+- Servidor Api: frontend para kubernetes, todos se comunican con el para interactuar con el grupo de kubernetes.
+- Etcd: Almacena los datos de forma distribuida (toda la informacion recopilada, valores clave). Administran el grupo e implementan los registros dentro del grupo para que no hayna conflictos entre los maestros.
+- Kubelet: agente que se ejecuta en cada nodo del cluster. asegura que los contenedores esten ejecutandose correctamente en los nodos.
+- Contenedor runtime: software subjacente para ejecutar contendores. Ejemplo, Docker.
+- Controlador: cerebro detreas de la orquestacion. Responsable de notar y responder cuando los contenedore de nodos o puntos finales caen.
+- Scheduler o Programador: distribuye en trabajo o contenedores en multiples nodos. busca contenedores recien creados y los asigna a los nodos.
+- Core DNS: herramienta por defecto para controlar DNS.
+
+### Comandos iniciales
 
 - `docker run my-web-server` crear el contenedor adminsitrador.
 - `kubectl run --replicas=1000 my-web-server` crea 1000 instancias de **my-web-server**.
@@ -670,18 +697,3 @@ Otros comandos:
 - `kubectl cluster-info`informacion de los clusters.
 - `kubectl get` nodes lista nodos de un cluster.
 - `kubectl run my-web-app --imag`ejecuta miles de instancias de nustra aplicacion en miles de nodos.
-
-#### Arquitectura
-
-- Nodos: Maquina fisica o virtual en la que un soffware de Kubernetes instala las herramientas.  Es una maquina de trabajo donde se lanzan los contenedores a travez de contenedores.
-- Cluster: grupo de nodos agrupados. Si un nodo falla se puede acceder a otro.
-- Maestro: Nodo con los componentes del plano de kubernetes ya instalados. Vigila los nodos del grupo y orkesta los contenedores de los nodos trabajadores.
-
-Componentes de kubernetes:
-
-- Servidor Api: frontend para kubernetes, todos se comunican con el para interactuar con el grupo de kubernetes.
-- Etcd: Almacena los datos de forma distribuida. Administran el grupo e implementan los registros dentro del grupo para que no hayna conflictos entre los maestros.
-- Kubelet: agente que se ejecuta en cada nodo del cluster. asegura que los contenedores esten ejecutandose correctamente en los nodos.
-- Contenedor runtime: software subjacente para ejecutar contendores. Ejemplo, Docker.
-- Controlador: cerebro detreas de la orquestacion. Responsable de notar y responder cuando los contenedore de nodos o puntos finales caen.
-- Scheduler: distribuye en trabajo o contenedores en multiples nodos. busca contenedores recien creados y los asigna a los nodos.
