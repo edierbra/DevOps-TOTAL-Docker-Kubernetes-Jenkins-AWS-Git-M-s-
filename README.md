@@ -590,3 +590,19 @@ networks:
   front-tier:
   back-tier:
 ```
+
+## Seccion 17: Servicio de almacenamiento
+
+Estructura de almacenamiento:
+
+- var/lib/docker
+  - ausf
+  - contenedores
+  - imagenes
+  - volumenes
+
+Como las imagenes estan conformadas por capas, las capas se pueden reutilizar en otras imagenes. Los controladores de almacenamiento gestionan las capas, algunas de los controladores son: AUSF, ZF, BTRFS, DEVICE MAPPER, OVERLAY Y OVERLAY 2.
+
+- `docker colume create date_volume` crea un volumen.
+- `docker run -v data_volume:var/lib/mysql mysql` (Metodo anticuado) guardar los datos del contenedor en el volumen creado, y asi no perderlos cuando se elimine el contenedor. Si no se crea el volumen anteriormente, docker lo creara automaticamente. **data_volume** puede ser un montaje de union, es decir guardar los datos en otro directorio.
+- `docker run / --mount type=bind, source=/data/mysql, target=/var/lib/mysql mysql`
