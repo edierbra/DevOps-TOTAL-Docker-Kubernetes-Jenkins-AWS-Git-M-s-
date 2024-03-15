@@ -606,3 +606,16 @@ Como las imagenes estan conformadas por capas, las capas se pueden reutilizar en
 - `docker colume create date_volume` crea un volumen.
 - `docker run -v data_volume:var/lib/mysql mysql` (Metodo anticuado) guardar los datos del contenedor en el volumen creado, y asi no perderlos cuando se elimine el contenedor. Si no se crea el volumen anteriormente, docker lo creara automaticamente. **data_volume** puede ser un montaje de union, es decir guardar los datos en otro directorio.
 - `docker run / --mount type=bind, source=/data/mysql, target=/var/lib/mysql mysql`
+
+## Seccion 18: redes
+
+Al instalar Docker  se crean 3 redes iniciales: BRIDGE, HOST, NONE
+
+El servidor DNS de docker esta en la direcion 127.0.0.11 y auda a los contenedores acceder a los unos con los otros a partir de el nombre del contenedor, por lo que la direcion ip de cada contenedor puede cambiar. Por lo tanto, no se recomienda enlazar contenedores con su propia ip.
+
+- `docker network ls` lista las redes creadas.
+- `docker run ubuntu` simpre asocia al contenedor a la red  predeterminada **BRIDGE** (172.17.0.1).
+- `docker run ubuntu --network=host` agrega al contenedo a la red host, Esto significa que el contenedor comparte la misma interfaz de red, la dirección IP y las puertas de enlace que el host. Es decir, utiliza directamente la interfaz de red del sistema host.
+- `docker run ubuntu --network=host` los contenedores no estan conectados a ninguna red. estan sin acceso al exterior u otros contenedores. Es decir, estan aislados.
+- `docker network create / driver bridge subnet 182.18.0.2 custom-network` crea una red llamada **custom-network**.
+- `docker inspect <id o nombre del contenedor>` ver detalles del contenedor como la red a la cual esta asociado.
