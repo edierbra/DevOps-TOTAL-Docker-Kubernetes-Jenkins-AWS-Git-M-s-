@@ -622,9 +622,9 @@ El servidor DNS de docker esta en la direcion 127.0.0.11 y auda a los contenedor
 
 ## Seccion 19: Orquestacion
 
-Herramientas y guiines que pueden ayudar a alojar contenedores en un entorno de produccion. Permite equilibrio de cargas y crear instancias de acuerdo al numero de solicitudes 
+Herramientas y guiines que pueden ayudar a alojar contenedores en un entorno de produccion. Permite equilibrio de cargas y crear instancias de acuerdo al numero de solicitudes.
 
-- `docker service creante --replicas=100 nodejs` crea 100 replicas de nodejs.
+- `docker service create --replicas=100 nodejs` crea 100 replicas de nodejs.
 
 Existen varios orkestadores:
 
@@ -639,3 +639,49 @@ Existen varios orkestadores:
   - Muchas opciones para configurar el despliegue, soporte para proveedores.
   - compatible con todos los proveedores de servicios en la nube.
 
+## Seccion 20: Docker Swarm
+
+### Swarm
+
+Se deben tener varios host con docker instalado y asignar a uno de ellos cono administrador swarm y los otros como nodos trabajadores.
+
+Configuracion:
+
+- `docker run my-web-server` para crear el administrador swarm.
+- `docker service create --replicas=3 my-web-server` para crear las instancias de nodos trabajadores. **Se debe ejecutra en el host administrador swarm.**
+- `docker swarm init` en el administrador swarm.
+- `docker swarm join --token <token>` en los nodos trabajadores.
+
+### Kubernetes
+
+Utiliza los host de docker para alojar apps en forma de contenedores.
+
+#### Comandos iniciales
+
+- `docker run my-web-server` crear el contenedor adminsitrador.
+- `kubectl run --replicas=1000 my-web-server` crea 1000 instancias de **my-web-server**.
+- `kubectl run --replicas=2000 my-web-server` lo escala a 2000.
+- `kubectl rolling-update my-web-server --web-server2` actualiza las instancias de forma continua y de a una.
+- `kubectl rolling-update my-web-server --roll back` si algo sale mal revierte la actualizacion de las instancias.
+
+Otros comandos:
+
+- `kubectl run hello-minikube` despliega una aplicacion en el cluster.
+- `kubectl cluster-info`informacion de los clusters.
+- `kubectl get` nodes lista nodos de un cluster.
+- `kubectl run my-web-app --imag`ejecuta miles de instancias de nustra aplicacion en miles de nodos.
+
+#### Arquitectura
+
+- Nodos: Maquina fisica o virtual en la que un soffware de Kubernetes instala las herramientas.  Es una maquina de trabajo donde se lanzan los contenedores a travez de contenedores.
+- Cluster: grupo de nodos agrupados. Si un nodo falla se puede acceder a otro.
+- Maestro: Nodo con los componentes del plano de kubernetes ya instalados. Vigila los nodos del grupo y orkesta los contenedores de los nodos trabajadores.
+
+Componentes de kubernetes:
+
+- Servidor Api: frontend para kubernetes, todos se comunican con el para interactuar con el grupo de kubernetes.
+- Etcd: Almacena los datos de forma distribuida. Administran el grupo e implementan los registros dentro del grupo para que no hayna conflictos entre los maestros.
+- Kubelet: agente que se ejecuta en cada nodo del cluster. asegura que los contenedores esten ejecutandose correctamente en los nodos.
+- Contenedor runtime: software subjacente para ejecutar contendores. Ejemplo, Docker.
+- Controlador: cerebro detreas de la orquestacion. Responsable de notar y responder cuando los contenedore de nodos o puntos finales caen.
+- Scheduler: distribuye en trabajo o contenedores en multiples nodos. busca contenedores recien creados y los asigna a los nodos.
