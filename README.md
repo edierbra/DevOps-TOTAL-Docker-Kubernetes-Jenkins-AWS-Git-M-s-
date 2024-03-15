@@ -607,7 +607,7 @@ Como las imagenes estan conformadas por capas, las capas se pueden reutilizar en
 - `docker run -v data_volume:var/lib/mysql mysql` (Metodo anticuado) guardar los datos del contenedor en el volumen creado, y asi no perderlos cuando se elimine el contenedor. Si no se crea el volumen anteriormente, docker lo creara automaticamente. **data_volume** puede ser un montaje de union, es decir guardar los datos en otro directorio.
 - `docker run / --mount type=bind, source=/data/mysql, target=/var/lib/mysql mysql`
 
-## Seccion 18: redes
+## Seccion 18: Redes
 
 Al instalar Docker  se crean 3 redes iniciales: BRIDGE, HOST, NONE
 
@@ -619,3 +619,23 @@ El servidor DNS de docker esta en la direcion 127.0.0.11 y auda a los contenedor
 - `docker run ubuntu --network=host` los contenedores no estan conectados a ninguna red. estan sin acceso al exterior u otros contenedores. Es decir, estan aislados.
 - `docker network create / driver bridge subnet 182.18.0.2 custom-network` crea una red llamada **custom-network**.
 - `docker inspect <id o nombre del contenedor>` ver detalles del contenedor como la red a la cual esta asociado.
+
+## Seccion 19: Orquestacion
+
+Herramientas y guiines que pueden ayudar a alojar contenedores en un entorno de produccion. Permite equilibrio de cargas y crear instancias de acuerdo al numero de solicitudes 
+
+- `docker service creante --replicas=100 nodejs` crea 100 replicas de nodejs.
+
+Existen varios orkestadores:
+
+- Docker swarm:
+  - Facil de configurar e iniciar.
+  - No tiene funciones avanzadas de auto escalas.
+- Mesos:
+  - Dificil de configurar e iniciar.
+  - Admite algunas opciones avanzadas.
+- Kubernetes:
+  - Un poco dificil de configurar e iniciar
+  - Muchas opciones para configurar el despliegue, soporte para proveedores.
+  - compatible con todos los proveedores de servicios en la nube.
+
