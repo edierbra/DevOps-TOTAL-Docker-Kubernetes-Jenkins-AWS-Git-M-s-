@@ -697,8 +697,9 @@ Utiliza los host de docker para alojar apps en forma de contenedores. Es utiliza
 - `kubectl` comando para implementar y administarr aplicaciones en un cluster de kubernetes, obtine informacion del cluster, el estado de otros nodos del cluster, etc.
 - `kubectl run`crea un pod.
 - `kubectl run ngnix --image nginx`crea un pod de ngnix llamado nginx.
-- `kubectl create` crea recurso via CLIO o YAML.
+- `kubectl create <pod/>deploiment>` crea recurso via CLIO o YAML.
 - `kubectk create deployment nginx --image ngnix`crea un deploymen a partir de la version v1.18
+- `kubectl delete <pod / deployment>` Elimina un pod o deployment.
 - `kubectl apply` crea y actualiza sobre todo via YAML.
 - `kubectl version`ver version de kubectl.
 - `kubectl.
@@ -706,6 +707,7 @@ Utiliza los host de docker para alojar apps en forma de contenedores. Es utiliza
 - `kubectl get nodes` lista los nodos disponibles de un cluster.
 - `kubectl run my-web-app --imag`ejecuta miles de instancias de nustra aplicacion en miles de nodos.
 - `kubectl run hello-minikube` despliega una aplicacion en el cluster.
+- `kubectl logs pod/<nombre del pod>` ver los logs de un pod.
 
 ### Comandos iniciales
 
