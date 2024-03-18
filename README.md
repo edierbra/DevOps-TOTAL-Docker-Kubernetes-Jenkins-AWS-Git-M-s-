@@ -664,7 +664,7 @@ Utiliza los host de docker para alojar apps en forma de contenedores. Es utiliza
 
 ### Conceptos basicos
 
-- Nodos: Maquina fisica o virtual en la que un soffware de Kubernetes instala las herramientas.  Es una maquina de trabajo donde se lanzan los contenedores.
+- Nodos: Maquina fisica o virtual en la que un soffware de Kubernetes instala las herramientas. Es una maquina de trabajo donde se lanzan los contenedores.
 - Cluster: grupo de nodos agrupados. Si un nodo falla se puede acceder a otro.
 - Maestro: Nodo con los componentes del plano de kubernetes ya instalados.
   - Vigila los nodos del grupo y orquesta los contenedores de los nodos trabajadores.
@@ -683,6 +683,30 @@ Utiliza los host de docker para alojar apps en forma de contenedores. Es utiliza
 - Scheduler o Programador: distribuye en trabajo o contenedores en multiples nodos. busca contenedores recien creados y los asigna a los nodos.
 - Core DNS: herramienta por defecto para controlar DNS.
 
+### Conocimientos basicos
+
+- Pod: es la unidad basica de implementacion o deployment en ingles. Uno o mas contenedores siendo ejecutados en conjunto en un mismo nodo. Tecnicamente se hace deployments de contenedores directamente en kubernetes, solo se hace deployments de pops y se suan cosas por env¿cima de estos, como controladores para controlar esos pods.
+- Controlador: para crear o actualizar pods y otros objetos. Casi siempre creara un controlador que es un objeto para validar si lo que sucede dentro de kubernetes es lo que se le ha pedido que haga. Hay varios tipos:
+  - Deployments, ReplicaSet: se usan casi siempre y controlan a los pods en los niveles mas bajos.
+  - Se pueden hacer diferentes tipos de controladores, hasta de terceros: StatefulSet, DaemonSet, Job, CrobJob, etc.
+- Servicio: punto final que se le da aun conjunto de pods. Cuando se usa un controlador de deployments para hacer un deployment en un conjunto de pods replica, se esta implementando un servicio. El servicion significa que le esta dando un punto final persistente en el cluster, para que todo lo demas pueda acceder a ese conjunto de pods en un nombre y puerto DNS especifico.
+- Namespace: es un filtro de vista en la linea de comandos. Filtra las vistas cuando se usa la linea de comando **kubectl** y solo queremos ver ciertas cosas que nos interesan en ese preciso momento.
+
+### Comandos basicos
+
+- `kubectl` comando para implementar y administarr aplicaciones en un cluster de kubernetes, obtine informacion del cluster, el estado de otros nodos del cluster, etc.
+- `kubectl run`crea un pod.
+- `kubectl run ngnix --image nginx`crea un pod de ngnix llamado nginx.
+- `kubectl create` crea recurso via CLIO o YAML.
+- `kubectk create deployment nginx --image ngnix`crea un deploymen a partir de la version v1.18
+- `kubectl apply` crea y actualiza sobre todo via YAML.
+- `kubectl version`ver version de kubectl.
+- `kubectl.
+- `kubectl cluster-info`informacion de los clusters.
+- `kubectl get nodes` lista los nodos disponibles de un cluster.
+- `kubectl run my-web-app --imag`ejecuta miles de instancias de nustra aplicacion en miles de nodos.
+- `kubectl run hello-minikube` despliega una aplicacion en el cluster.
+
 ### Comandos iniciales
 
 - `docker run my-web-server` crear el contenedor adminsitrador.
@@ -691,9 +715,15 @@ Utiliza los host de docker para alojar apps en forma de contenedores. Es utiliza
 - `kubectl rolling-update my-web-server --web-server2` actualiza las instancias de forma continua y de a una.
 - `kubectl rolling-update my-web-server --roll back` si algo sale mal revierte la actualizacion de las instancias.
 
-Otros comandos:
+### Pods
 
-- `kubectl run hello-minikube` despliega una aplicacion en el cluster.
-- `kubectl cluster-info`informacion de los clusters.
-- `kubectl get` nodes lista nodos de un cluster.
-- `kubectl run my-web-app --imag`ejecuta miles de instancias de nustra aplicacion en miles de nodos.
+- Los contenedores se encansulan en pods.
+- Es una instancia unica en una aplicacion.
+- Es el objeto mas pequeño que puedes crear en kubernetes.
+- Usualmente un pod tiene un contenedor.
+- No esta restringido a tener un contenedor por pod.
+- Un pod puede tener multiples contenedores, usualmente son contenedores de diferente tipo.
+- Para escalar la aplicacoion se necesitan crear pods adicionales.
+- Si decrece el numero de usuarios, simplemente eliminamos pods.
+- No se deben añadir contenedores a un pod existente para escalar la aplicacion.
+- Aveces pueden haber contenedores auxiliares, los cuales hacen algun tipo de tarea de sopprte. Estos contenedores auxiliares estan en el mismo pod. Cuando se crea un contenedor de la aplicacion, se crea el auxiliar.
