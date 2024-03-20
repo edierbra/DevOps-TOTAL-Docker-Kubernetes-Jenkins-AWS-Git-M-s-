@@ -764,7 +764,7 @@ spec:
 
 [codebeautify.org](https://codebeautify.org/yaml-validator) ayuda a verificar si el archivo .yml esta bien estructurado.
 
-- `kubectl create -f podtest.yml` ejecuta el archivo .yml para crear el recurso. -f indica que se debe crear el recurso con el archivo proporcionado. Podemos reemplazar **create** por **apply** y el resultado es el mismo.
+- `kubectl create -f <archivo yaml>` ejecuta el archivo .yml para crear el recurso. -f indica que se debe crear el recurso con el archivo proporcionado. Podemos reemplazar **create** por **apply** y el resultado es el mismo.
 
 ### Replicacion Controller
 
@@ -803,10 +803,10 @@ spec:
   replicas: 2 
 ```
 
-- `kubectl apply -f <archivo ymal>` crea o actualiza el recurso.
-- `kubectl get replicationcontroller` ver los ReplicationController creados.
 - **template** especifica que y como debe ser la instancia que debe replicar.
 - **replicas** establece la cantidad de replicas que queremos.
+- `kubectl apply -f <archivo yaml>` crea o actualiza el recurso.
+- `kubectl get replicationcontroller` ver los ReplicationController creados.
 
 ### ReplicaSet
 
@@ -835,16 +835,19 @@ spec:
 
     spec:
       containers:
-        - name:  nginx-container
-          image:  nginx
+        - name: nginx-container
+          image: nginx
 
-replicas: 2
+  replicas: 4
 
-selector:
-  matchLabels:
-    type: front-end
+  selector:
+    matchLabels:
+      type: front-end
+      app: app1
 ```
 
-- `apiVersion: apps/v1` es la version para ReplicaSet.
-- `selector` si tenemos muchas aplicaciones, tenemos que etiquetarlas para encontrarlas facilmente y poder filtrarlas. Ai, el selector sabe que pods buscar si hay disponibles, y si no crearlas para llegar al numero de replicas requeridas. Los labels tambien sirven para identificar los pods, y asi monitorearlos.
-
+- **apiVersion: apps/v1** es la version para ReplicaSet.
+- **selector** si tenemos muchas aplicaciones, tenemos que etiquetarlas para encontrarlas facilmente y poder filtrarlas. Ai, el selector sabe que pods buscar si hay disponibles, y si no crearlas para llegar al numero de replicas requeridas. Los labels tambien sirven para identificar los pods, y asi monitorearlos.
+- `kubectl apply -f <archivo yaml>` crea o actualiza el recurso.
+- `kubectl get replicaset` ver los ReplicaSet creados.
+- `kubectl scale --replicas=2 -f <archivo yaml>` escala a dos replicas.
