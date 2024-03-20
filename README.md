@@ -851,3 +851,11 @@ spec:
 - `kubectl apply -f <archivo yaml>` crea o actualiza el recurso.
 - `kubectl get replicaset` ver los ReplicaSet creados.
 - `kubectl scale --replicas=2 -f <archivo yaml>` escala a dos replicas.
+
+## Deployment
+
+- brinda la capacidad de actualizar o hacer upgrade de las instancias subyacentes sin problemas usando actualizaciones continuas llamadas rolling updates, deshacer cambios, pausar, reanudar los cambios segun sea requerido.:
+  - Rolling update: realiza actualizaciones de las instancias una tras otra para lograr tipempo 0 de donwtime y que no se vean afectados los usuarios.
+  - Rollback: desacer los cambios recientes y volver atras .
+  - Multiples cambios a la vez: en el caso de hacer varios cambios a la vez (actualizar versiones subyacentes del servidor web, escalar el entorno y mucho mas), pausamos el entorno, hacemos los cambios y reanudamos el entorno para que todos los cambios se despliguen juntos.
+  - Cuando se crea un Deployment se crea un ReplicaSet, del ReplicaSet automaticamente se crean los pods requeridos.
