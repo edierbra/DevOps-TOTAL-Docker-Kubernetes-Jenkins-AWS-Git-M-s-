@@ -748,8 +748,7 @@ Ejemplo:
 
 Extenciones recomendadas en visual studio: YAML, KUBERNETES SUPORT
 
-```yaml
-apiVersion: v1
+```yml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -765,4 +764,87 @@ spec:
 
 [codebeautify.org](https://codebeautify.org/yaml-validator) ayuda a verificar si el archivo .yml esta bien estructurado.
 
-- `kubectl create -f podtest.yml` ejecuta el archivo .yml para crear el recurso. -f indica que se debe crear el recurso con el archivo proporcionado.
+- `kubectl create -f podtest.yml` ejecuta el archivo .yml para crear el recurso. -f indica que se debe crear el recurso con el archivo proporcionado. Podemos reemplazar **create** por **apply** y el resultado es el mismo.
+
+### Replicacion Controller
+
+- Ejecuta varias instancias de un mismo pod en un mismo cluster de kubernetes.
+- Brinda una gran disposicion de la app para que podamos acceder.
+- Si tememos un solo pod y este falla, Replication controller ayuda a crear automaticamente un nuevo pod.
+- Se encarga y aseguira que el numero especificado de pods se este ejecutando en todo momento.
+- Balancea y Escala la aplicacion de acuerdo al numero de usuarios que quieren entrar a la aplicacion.
+
+Ejemplo:
+
+```yaml
+apiVersion: v1
+
+kind: ReplicationController
+
+metadata:
+  name: app1-rc
+  labels:
+    app: app1
+    type: front-end
+
+spec:
+  template:
+    metadata:
+      name: app1-pod
+      labels:
+        app: app1
+        type: front-end
+        
+    spec:
+      containers:
+        - name:  nginx-container
+          image:  nginx
+
+  replicas: 2 
+```
+
+- `kubectl apply -f <archivo ymal>` crea o actualiza el recurso.
+- `kubectl get replicationcontroller` ver los ReplicationController creados.
+- **template** especifica que y como debe ser la instancia que debe replicar.
+- **replicas** establece la cantidad de replicas que queremos.
+
+### ReplicaSet
+
+- Es la forma actual que se utiliza en kubernetes para hacer lo de Replication Controller.
+
+Ejemplo:
+
+```yaml
+apiVersion: apps/v1
+
+kind: ReplicaSet
+
+metadata:
+  name: app1-rs
+  labels:
+    app: app1
+    type: front-end
+
+spec:
+  template:
+    metadata:
+      name: app1-pod
+      labels:
+        app: app1
+        type: front-end
+
+    spec:
+      containers:
+        - name:  nginx-container
+          image:  nginx
+
+replicas: 2
+
+selector:
+  matchLabels:
+    type: front-end
+```
+
+- `apiVersion: apps/v1` es la version para ReplicaSet.
+- `selector` si tenemos muchas aplicaciones, tenemos que etiquetarlas para encontrarlas facilmente y poder filtrarlas. Ai, el selector sabe que pods buscar si hay disponibles, y si no crearlas para llegar al numero de replicas requeridas. Los labels tambien sirven para identificar los pods, y asi monitorearlos.
+
