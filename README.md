@@ -697,17 +697,21 @@ Utiliza los host de docker para alojar apps en forma de contenedores. Es utiliza
 - `kubectl` comando para implementar y administarr aplicaciones en un cluster de kubernetes, obtine informacion del cluster, el estado de otros nodos del cluster, etc.
 - `kubectl run`crea un pod.
 - `kubectl run ngnix --image nginx`crea un pod de ngnix llamado nginx.
-- `kubectl create <pod/>deploiment>` crea recurso via CLIO o YAML.
+- `kubectl create <pod / deploiment>` crea recurso via CLIO o YAML.
 - `kubectk create deployment nginx --image ngnix`crea un deploymen a partir de la version v1.18
-- `kubectl delete <pod / deployment>` Elimina un pod o deployment.
+- `kubectl delete <pod / deployment> <name del recurso a eliminar>` Elimina un pod o deployment.
 - `kubectl apply` crea y actualiza sobre todo via YAML.
 - `kubectl version`ver version de kubectl.
 - `kubectl.
 - `kubectl cluster-info`informacion de los clusters.
+- `kubectl get all`lista todos los recursos del cluster
 - `kubectl get nodes` lista los nodos disponibles de un cluster.
+- `kubectl get pods` lista los pods disponibles de un cluster.
+- `kubectl get all -o wide` **-o wide** muestra informacion adicional.
 - `kubectl run my-web-app --imag`ejecuta miles de instancias de nustra aplicacion en miles de nodos.
 - `kubectl run hello-minikube` despliega una aplicacion en el cluster.
 - `kubectl logs pod/<nombre del pod>` ver los logs de un pod.
+- `kubectl describe pods` ver info de los pods (nombre, nodo creado, labels, estado y el los contenedores y eventos).
 
 ### Comandos iniciales
 
@@ -729,3 +733,36 @@ Utiliza los host de docker para alojar apps en forma de contenedores. Es utiliza
 - Si decrece el numero de usuarios, simplemente eliminamos pods.
 - No se deben añadir contenedores a un pod existente para escalar la aplicacion.
 - Aveces pueden haber contenedores auxiliares, los cuales hacen algun tipo de tarea de sopprte. Estos contenedores auxiliares estan en el mismo pod. Cuando se crea un contenedor de la aplicacion, se crea el auxiliar.
+
+### Introduccion a YAML
+
+- Kubernetes usa archivos YAML como entradas para la creacionde objetos (Pods, Replicas Sets, Deployments, servicios y mas).
+- Los espacios antes de cada propiedad son importantes.
+- La estructura del archivo YAML debe tener 4 campos obligatorios en el nivel superior:
+  - apiVersion: version de la Api de kubernetes.
+  - kind: tipo de objeto a crear.
+  - metadata: datos sobre el objeto, y es un diccionario con las propiedades del objeto. Por ejemplo, name, labels.
+  - spec: informacion adicional. Es un diccionario con propiedades como, containers, el cual es un array de diccionarios con propiedades name e image.
+
+Ejemplo:
+
+Extenciones recomendadas en visual studio: YAML, KUBERNETES SUPORT
+
+```yaml
+apiVersion: v1
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app1-pod
+  labels:
+    app: app1
+    type: front-end
+spec:
+  containers:
+    - name:  nginx-container
+      image:  nginx
+```
+
+[codebeautify.org](https://codebeautify.org/yaml-validator) ayuda a verificar si el archivo .yml esta bien estructurado.
+
+- `kubectl create -f podtest.yml` ejecuta el archivo .yml para crear el recurso. -f indica que se debe crear el recurso con el archivo proporcionado.
