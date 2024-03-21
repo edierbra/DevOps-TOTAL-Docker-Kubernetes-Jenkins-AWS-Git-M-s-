@@ -859,3 +859,73 @@ spec:
   - Rollback: desacer los cambios recientes y volver atras .
   - Multiples cambios a la vez: en el caso de hacer varios cambios a la vez (actualizar versiones subyacentes del servidor web, escalar el entorno y mucho mas), pausamos el entorno, hacemos los cambios y reanudamos el entorno para que todos los cambios se despliguen juntos.
   - Cuando se crea un Deployment se crea un ReplicaSet, del ReplicaSet automaticamente se crean los pods requeridos.
+
+Ejemplo:
+
+```yml
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+  name: app1-dp
+  labels:
+    app: app1
+    type: front-end
+
+spec:
+  template:
+    metadata:
+      name: app1-pod
+      labels:
+        app: app1
+        type: front-end
+
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx
+
+  replicas: 5
+
+  selector:
+    matchLabels:
+      type: front-end
+      app: app1
+
+```
+
+- `kubectl apply -f <archivo yaml>` crea o actualiza el recurso.
+  - `kubectl scale deploy/<name del deployment> --replicas=2` escala a 2 el deployment.
+
+### Actualizacion de Deployment
+
+- No olvidar colocar `--record` al crear el deployment si quiero llevar el registro de los cambios del deployment.
+- `kubectl apply -f .\kubernetes\dptest.yml --record` crea el deployment y habilita el registro del cambio del deployment.
+- `kubectl rollout status deploy/<nombre del deployment>` para ver el estado del rollout.
+- `kubectl rollout history deploy/<nombre del deployment>` para ver el historial de rollouts.
+- `kubectl set image deployment/app1-dp nginx-container=nginx:1.17.10` actualiza el contenedor **nginx-container** a la version **nginx:1.17.10** (ver el archico .yml).
+
+Existen diferentes estrategias para el deployment:
+
+#### Recreate
+
+- Al realizar un deployment se hace un rollout y al hacer un nuevo rollout se crea una nueva version del deployment.
+- En la estrategia Recreate, se da de baja todas la sinstancias de nuestra aplicacion a la vez, para despues crrar una nueva version de las instancias.
+- Durante el periodo de recrear las nuevas instancias, la app quedara inaccesible para el usuario.
+- `kubectl apply -f .\kubernetes\dptest.yml` crea el deployment.
+
+#### rolling Update
+
+- Una por una, las instancias se dan de baja y se actualizan a la nueva version.
+- La aplicacion segira activa para el usuario mientra se relaizan los cambios.
+- Al crear un  uevo deployment, se crea automaticamente un ReplicaSet. Mientras que en un ReplicaSet se destruyen los pods, emn el otro se hacen los cambios.
+- `kubectl set image deployment/app1-dp nginx-container=nginx:1.17.10` actualiza el contenedor **nginx-container** a la version **nginx:1.17.10** (ver el archico .yml).
+
+![rollingupdate](kubernetes/img/rollingupdate.png)
+
+#### Rollback
+
+- Permite deshacer los cambios realizados y volver a la version anterior.
+- El deployment eliminara los pods n uevos uno por uno y volvera a traer los pods de la version anterior.
+- `kubectl rollout undo deployment/<nombre del deployment>` permite volver a la version anterior.
