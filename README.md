@@ -938,8 +938,15 @@ Existen diferentes estrategias para el deployment:
 - un servicio es una direccion estable para un pod o grupo de pods.
 - en la practica se exponen los servicios para crear estos recursos que apuntan hacia los back-end pods.
 - `kubectl expose`se usa para exponer un servicio. Tambien, se puede con un archivo **YAML** y el comando `kubectl create`.
+- `kubectl get services` ver los servicios creados.
 
 Tipos de servicios:
+
+- ClusterIP
+- NodePort
+- LoadBalancer
+- ExternalName
+- CoreDNS
 
 #### ClusterIP
 
@@ -961,6 +968,28 @@ Tipos de servicios:
 - Expoone el servicio en la direcion ip de cada nodo en un puerto estatico.
 - el codigo se debe modificar para conectarse a ese nuevo puerto.
 - Un servicio ClusterIP, al que se direccionara el trafico desde el servicio NodePort, se creara automaticamente.
+
+Ejemplo:
+
+```yml
+apiVersion: v1
+kind: Service
+metadata:
+  name: app1-service
+spec:
+  type: NodePort
+  ports:
+    - targetPort: 80
+      port: 80
+      nodePort: 30200
+  selector:
+    app: app1
+```
+
+- El servicio utiliza el **selector** para encontrar la app que coincida con ese label.
+- `kubectl apply -f <deployment>` creamos la app.
+- `kubectl apply -f <services>` creamos el services.
+- `curl <ip del pc>:<nodePort>` Acceder al servicio.`localhost:<nodePort>` o `<ip del pc>:<nodePort>` en el navegador.
 
 #### LoadBalancer
 
