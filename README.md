@@ -959,6 +959,26 @@ Tipos de servicios:
 - No usa high ports (puertos altos).
 - Al estar dentro dle contenedor, es realmente facil de usar cuando se esta lidiando con servicios back-end.
 
+Ejemplo:
+
+```yml
+apiVersion: v1
+kind: Service
+metadata:
+  name: app1-clusteriptest
+spec: 
+  type: ClusterIP
+  ports:
+    - targetPort:  80
+      port:  80
+  selector:
+    app: app1
+```
+
+- El servicio utiliza el **selector** para encontrar la app que coincida con ese label.
+- `kubectl apply -f <deployment>` creamos la app.
+- `kubectl apply -f <services>` creamos el services.
+
 #### NodePort
 
 - Funciona en cualquier configuracion de kubernetes.
@@ -1009,3 +1029,54 @@ spec:
 - docker Desktop: DNS viene por defecto.
 - Minikube: DNS viene por defecto.
 - MicroK8s: debemos habilitarlo con el comando `microk8s.enable dns`.
+
+### Modelo de Network en Kubernetes
+
+**Aclaracion:** la mayopria de problemas con solucion de contenedores esta dada por firewalls y NAT.
+
+- Todos los nodos deben poder comunicarse entre si sin NAT.
+- Todos los pods deben poder comunicarse entre si sin NAT.
+- Los nodos y pods deben poder comunicarse entre si sin NAT.
+- Cada pod sabe su propia direccion Ip (no NAT).
+- La direccion IP de los pods es asignada por la implementacion de redes que tenga.
+- Kubernetes no exige ninguna implementacion en particular.
+- Todo puede ser accesible por todo.
+- No es necesario cambio o modificacion de port o direccion.
+- No hay nuevos protocolos.
+- Las direcciones IP no tienen porque ser portables de un nodo hacia otro.
+- Si se quiere seguridad se deben asignar politicas de redes. Mediante la incorporacion de implementaciones de redes de terceros. Por ejemplo, Flannel, Calico, Kubenet, Romana, Cilium, entre otros.
+- Se recomienda implementar una red de terceros basada en un provedor de nube, provedor actual o una distribucion de kubernetes.
+- Los pods tienen nivel 3 (IP) de conectividad.
+- Los servicios tienen niver 4 (TCP y UDP) y apuntan a un solo puerto UDP o TCP, no a rangos de puertos o paquetes arbitrarios de IPs.
+- Los nodos que estamos usando estan configurados para ser usados con kubenet, Calico o cualquier otro.
+- **kube-proxy** es participe en el camino para conectarse a un pod o un contenedor, y no suele ser particularmente rapido en uso a gran escala.
+- **kube-router** es una alternativa para **kube-proxy**.
+
+### CNI: Interfaz de Redes de Contenedores
+
+- En un mundo de prodiccion necesitamos CNI plugins.
+- CNI es una normativa standar en la industria que permite a todos los terceros soportar Kubernetes con sus plugins.
+- Algunas tareas que nuestro Cluster de Kubernets asigna a estos plugions son:
+  - Asignar direcciones IP (IPAM plugin).
+  - Adicionar una interfaz de red a los pod's network namespace.
+  - Configuarar la interfaz, rutas de direccionado y mucho mas.
+
+#### Red Pod a Pod
+
+- Es la comunicacion de un pod a otro pod.
+- Esto usualmente no pasa ya que nuestros pods se comunican a travez de servicios.
+- Se puede establecer una comunicacion directa a los pods desde el host y generalmente es implementada por los CNI plugins.
+
+#### Red Pod a Servicio
+
+- Es la comunicacion de un pod a un Servicio.
+- Provee una comunicacion interna y actua como un load balancer entre nuestro contenedor y la comunicacion con el servicio.
+- Generalmente es implementado por **kube-proxy** o **kube-router**.
+
+#### Politicas de redes
+
+- Las CNI plugins pueden o no soportar politicas de redes.
+- es importante que CNI plugin usar.
+- Mientars mas garnde sea el cluster y menos relacionado esten sus servicios dentro de el, mas va a necesitar segmentar su infraestructura de red en el mismo cluster, y para esto estan las politicas de redes.
+- Se pueden tener ciertas conexiones provenientes de **LoadBalancer**, otras conexiones de **kube-proxy** para servicios de NodePort, tambien de **meta plugins** y mucho mas.
+- Incluso, se pueden tener varios CNI plugins, pero se recomienda dejarlo lo mas simple posible.
