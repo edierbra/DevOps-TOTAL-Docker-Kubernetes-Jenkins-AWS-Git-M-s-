@@ -929,3 +929,54 @@ Existen diferentes estrategias para el deployment:
 - Permite deshacer los cambios realizados y volver a la version anterior.
 - El deployment eliminara los pods n uevos uno por uno y volvera a traer los pods de la version anterior.
 - `kubectl rollout undo deployment/<nombre del deployment>` permite volver a la version anterior.
+
+### Servicios en Kubernetes
+
+- Permiten la comunicacion entre varios componentes dentro y fuera de la aplicacion.
+- Si necesitamos conectarnos con nuestro pod o pods, necesitamos crear un servicio.
+- Nos ayudan a conectar aplicaciones con otras aplicaciones o usuarios.
+- un servicio es una direccion estable para un pod o grupo de pods.
+- en la practica se exponen los servicios para crear estos recursos que apuntan hacia los back-end pods.
+- `kubectl expose`se usa para exponer un servicio. Tambien, se puede con un archivo **YAML** y el comando `kubectl create`.
+
+Tipos de servicios:
+
+#### ClusterIP
+
+- Funciona en cualquier configuracion de kubernetes.
+- Expone el servicio en una direccion interna del cluster.
+- Al usar `kubectl expose` se ejecuta el servicio por defecto, el cual es **ClusterIP**. Por lo tando si queremos otro tipo de servicio debemos especificarlo.
+- Solo esta disponible dentro del cluster (nodos y pods). No es bueno para exponerlo al resto de internet o fuera del cluster.
+- Se asigna una direccion ip virtual para el servicio (internamente y en un rango privado).
+- Usa el puerto que la app ya esta escuchando o sabiendo.
+- No usa high ports (puertos altos).
+- Al estar dentro dle contenedor, es realmente facil de usar cuando se esta lidiando con servicios back-end.
+
+#### NodePort
+
+- Funciona en cualquier configuracion de kubernetes.
+- Es accesibel fuera de nuestro cluster (nodos internos y cualquiera que se quiera conectar a el).
+- Usa high ports (puertos altos). Por defecto entre 30000 y el 32768.
+- NodePort va a eloigir un puerto en un rango alto y escuchara e interpretara a todos los nodos en ese puerto.
+- Expoone el servicio en la direcion ip de cada nodo en un puerto estatico.
+- el codigo se debe modificar para conectarse a ese nuevo puerto.
+- Un servicio ClusterIP, al que se direccionara el trafico desde el servicio NodePort, se creara automaticamente.
+
+#### LoadBalancer
+
+- Es un servicio esterno de un tercero. Puede usar un proxy externo, un servicio firewall. Si esta en un data center o en la nuve. Usualmente va a ser ese load balancer externo en la nube.
+- Algunos ejemplos son: AWS, Azure, GCP, OpenStack, etc.
+- Expone el servicio externamente utilizando un eLoadBalancer del provedor de la nube.
+- El LoadBalancer proporciona una ip estable a la que se puede acceder desde afuera.
+- Los servicios NodePort y ClusterIP se crean automaticamente y son a estos los que derecciona el trafico el LoadBalancer externo.
+
+#### ExternalName
+
+- Proporciona un alias interno para el nombre DNS externo.
+- Si dse crea un servicio llamado **mi-servicio**, un cliente interno puede acceder a el, pero si despues especificamos en **spec** con la propiedad **externalname**, un nombre como **ejemplo.com**, entonces **mi-servicio** se redirecciona a **ejemplo.com**.
+
+#### CoreDNS
+
+- docker Desktop: DNS viene por defecto.
+- Minikube: DNS viene por defecto.
+- MicroK8s: debemos habilitarlo con el comando `microk8s.enable dns`.
