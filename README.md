@@ -215,12 +215,12 @@ vagrant ssh web01
 vagarn reload web01
 ```
 
-## Seccion 5: Redes
+## Seccion 5: Git & GitHub - Redes
 
 - [Comandos windows](https://openwebinars.net/blog/20-comandos-de-red-mas-importantes-en-windows/)
 - [Comandos ubuntu](https://aprenderlinux.org/los-20-principales-comandos-de-red-de-linux/)
 
-## Seccion 6: Git & GitHub Principios basicos
+## Seccion 6: Git & GitHub - Principios basicos
 
 `git init` iniciar git.
 
@@ -322,7 +322,7 @@ Existe integraciones con Discord y Jenkins.
 
 ![GitFlow](/git-github/imgs/gitflow.png)
 
-## Secsion 10 : Docker - Teoria General e Introduccion
+## Secsion 10: Docker - Teoria General e Introduccion
 
 No se puede ejecutar un Contenedor si este tiene un Kernel diferente al Host.
 
@@ -376,13 +376,13 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 sudo docker run hello-world
 ```
 
-## Secsion 11: Docker en Windows
+## Secsion 11: Docker - Windows
 
 ### Instalacion de docker en windows
 
 Seguir el suguiente tutorial de [Docker Docs](https://docs.docker.com/desktop)
 
-## Seccion 12: Docker: Comandos
+## Seccion 12: Docker - Comandos
 
 - `docker run <nombre de la imagen>` ejecuta un contenedor ya sea localmente o de docker hub.
 - `docker ps` lista los contenedores en funcionamiento.
@@ -395,7 +395,7 @@ Seguir el suguiente tutorial de [Docker Docs](https://docs.docker.com/desktop)
 - `docker exec <nombre del contenedor> <comando>` permite ejecutar un comando en el contenedor.
 - `docker attach <id o nombre de docker>` adjunta de vuerlta al contenedor en ejecucion.
 
-## Seccion 13: Docker: Comando Run
+## Seccion 13: Docker - Comando Run
 
 ### Docker run
 
@@ -422,7 +422,7 @@ Seguir el suguiente tutorial de [Docker Docs](https://docs.docker.com/desktop)
 
 - `docker logs <id o nombre del contenedor>` permite ver los registros de un contenedor ejecutado en segundo plano.
 
-## Seccion 14: Docker imagenes
+## Seccion 14: Docker - Imagenes
 
 ### Crear una imagen
 
@@ -454,7 +454,7 @@ Estructura del dockerfile:
 
 Al construir la imagen se podran ver las capas, si hay un error docker no construye todo de nuevo, sino desde la capa que ocurrio el error.
 
-## Seccion 15: Docker Compose y Registros
+## Seccion 15: Docker - Compose y Registros
 
 Ejemplo apk de votacion:
 
@@ -591,7 +591,7 @@ networks:
   back-tier:
 ```
 
-## Seccion 17: Servicio de almacenamiento
+## Seccion 17: Docker - Servicio de almacenamiento
 
 Estructura de almacenamiento:
 
@@ -607,7 +607,7 @@ Como las imagenes estan conformadas por capas, las capas se pueden reutilizar en
 - `docker run -v data_volume:var/lib/mysql mysql` (Metodo anticuado) guardar los datos del contenedor en el volumen creado, y asi no perderlos cuando se elimine el contenedor. Si no se crea el volumen anteriormente, docker lo creara automaticamente. **data_volume** puede ser un montaje de union, es decir guardar los datos en otro directorio.
 - `docker run / --mount type=bind, source=/data/mysql, target=/var/lib/mysql mysql`
 
-## Seccion 18: Redes
+## Seccion 18: Docker - Redes
 
 Al instalar Docker  se crean 3 redes iniciales: BRIDGE, HOST, NONE
 
@@ -620,7 +620,7 @@ El servidor DNS de docker esta en la direcion 127.0.0.11 y auda a los contenedor
 - `docker network create / driver bridge subnet 182.18.0.2 custom-network` crea una red llamada **custom-network**.
 - `docker inspect <id o nombre del contenedor>` ver detalles del contenedor como la red a la cual esta asociado.
 
-## Seccion 19: Orquestacion
+## Seccion 19: Docker - Orquestacion
 
 Herramientas y guiines que pueden ayudar a alojar contenedores en un entorno de produccion. Permite equilibrio de cargas y crear instancias de acuerdo al numero de solicitudes.
 
@@ -645,7 +645,7 @@ Existen varios orkestadores:
   - compatible con todos los proveedores de servicios en la nube.
   - Cubre mas casos extremos que Swarm.
 
-## Seccion 20: Docker Swarm
+## Seccion 20: Docker - Swarm
 
 ### Swarm
 
@@ -658,7 +658,7 @@ Configuracion:
 - `docker swarm init` en el administrador swarm.
 - `docker swarm join --token <token>` en los nodos trabajadores.
 
-## Seccion 21: Kubernetes - Introduccion y Teoria
+## Seccion 21: Kubernetes - Introduccion y Teoria General
 
 Utiliza los host de docker para alojar apps en forma de contenedores. Es utilizada para organizar la impementacion y administracion de miles de contenedores en un entorno en cluster.
 
@@ -692,6 +692,8 @@ Utiliza los host de docker para alojar apps en forma de contenedores. Es utiliza
 - Servicio: punto final que se le da aun conjunto de pods. Cuando se usa un controlador de deployments para hacer un deployment en un conjunto de pods replica, se esta implementando un servicio. El servicion significa que le esta dando un punto final persistente en el cluster, para que todo lo demas pueda acceder a ese conjunto de pods en un nombre y puerto DNS especifico.
 - Namespace: es un filtro de vista en la linea de comandos. Filtra las vistas cuando se usa la linea de comando **kubectl** y solo queremos ver ciertas cosas que nos interesan en ese preciso momento.
 
+## Seccion 23: Kubernetes - Conceptos requeridos
+
 ### Comandos basicos
 
 - `kubectl` comando para implementar y administarr aplicaciones en un cluster de kubernetes, obtine informacion del cluster, el estado de otros nodos del cluster, etc.
@@ -720,6 +722,8 @@ Utiliza los host de docker para alojar apps en forma de contenedores. Es utiliza
 - `kubectl run --replicas=2000 my-web-server` lo escala a 2000.
 - `kubectl rolling-update my-web-server --web-server2` actualiza las instancias de forma continua y de a una.
 - `kubectl rolling-update my-web-server --roll back` si algo sale mal revierte la actualizacion de las instancias.
+
+## Seccion 24: Kubernetes - PODs y YAML
 
 ### Pods
 
@@ -765,6 +769,8 @@ spec:
 [codebeautify.org](https://codebeautify.org/yaml-validator) ayuda a verificar si el archivo .yml esta bien estructurado.
 
 - `kubectl create -f <archivo yaml>` ejecuta el archivo .yml para crear el recurso. -f indica que se debe crear el recurso con el archivo proporcionado. Podemos reemplazar **create** por **apply** y el resultado es el mismo.
+
+## Seccion 25: Kubernetes - Replicacion controller y ReplicaSet
 
 ### Replicacion Controller
 
@@ -852,7 +858,9 @@ spec:
 - `kubectl get replicaset` ver los ReplicaSet creados.
 - `kubectl scale --replicas=2 -f <archivo yaml>` escala a dos replicas.
 
-## Deployment
+## Seccion 26: Kubernetes - Deployments
+
+### Deployment
 
 - brinda la capacidad de actualizar o hacer upgrade de las instancias subyacentes sin problemas usando actualizaciones continuas llamadas rolling updates, deshacer cambios, pausar, reanudar los cambios segun sea requerido.:
   - Rolling update: realiza actualizaciones de las instancias una tras otra para lograr tipempo 0 de donwtime y que no se vean afectados los usuarios.
@@ -929,6 +937,8 @@ Existen diferentes estrategias para el deployment:
 - Permite deshacer los cambios realizados y volver a la version anterior.
 - El deployment eliminara los pods n uevos uno por uno y volvera a traer los pods de la version anterior.
 - `kubectl rollout undo deployment/<nombre del deployment>` permite volver a la version anterior.
+
+## Seccion 27: Kubernetes - Servicios y Networking
 
 ### Servicios en Kubernetes
 
@@ -1080,3 +1090,47 @@ spec:
 - Mientars mas garnde sea el cluster y menos relacionado esten sus servicios dentro de el, mas va a necesitar segmentar su infraestructura de red en el mismo cluster, y para esto estan las politicas de redes.
 - Se pueden tener ciertas conexiones provenientes de **LoadBalancer**, otras conexiones de **kube-proxy** para servicios de NodePort, tambien de **meta plugins** y mucho mas.
 - Incluso, se pueden tener varios CNI plugins, pero se recomienda dejarlo lo mas simple posible.
+
+## Seccion 28: Kubernetes - Namespaces y ConfigMaps
+
+### Namespace
+
+- Es un filtro para ver solo lo que nos interesa.
+- `kubectl get namespaces` muestra el filtro.
+- Si queremos realizar un deployment de la misma app muchas veces, entonces creamos diferentes namespaces y creamos en ellos los mismos pods y deployments.
+- Si somos un administrador de varios sistemas, asignamos un namespace distinto a cada persona para manejarlos por separado, establecer distintos permisos, etc.
+- Son usados por las politicas de red para controlar la capa de control de la red.
+- Al ejecutar `kubectl` se muestra el namespace **default**.
+- `--all-namespaces` para ver todos los recursos de todos los namespaces, o `-A` a partir de la version **v1.14**.
+- Existes diferentes Namespaces:
+  - kube-apiserver: es nuestro servidor API.
+  - kube-proxy: nodo por nodo, es el componente encargado de dirigir y mapear los puertos.
+  - kube-controller-manager y kube-sheduler: son componentes en el plano de control.
+  - coredns: nos provee un servicio con base DNS (antes era kube-dns).
+  - etcd: es nuetsro servidor etcd.
+  - kube-node-lease: desde la v1.14 de kubernetes hay un **kube-node-lease** namespace, el cual es una forma de implementar el **node heartbeats**, este regularmente hace ping al panel de control para verificar que este funcionando. El node heartbeats viene por defecto con la instalacion.
+  - kube-public: es creado por nuestro instalador y usado para la seguridad de bootstrapping.
+- `kubectl get pods --namespace=kube-system` o `kubectl get pods -n kube-system` para ver solo los pods del namespace **kube-system**.
+
+#### ConfigMaps
+
+- El unico objeto importante en este namspace es un ConfigMapo llamado cluster-info, para verlo ejecutamos `kubectl get configmaps -n kube-public`. Para verlo como .yaml ejecutamos `kubectl get configmap cluster-info -n kube-public -o yaml`.
+- Recurso en kubernetes que se encarga de almacenar el contenido de archivos o key-values de el API de kubernetes, dentro de la base de datos de etcd.
+- Es un mapa key-value que maneja toda la configuracion de un contenedor..
+- Pueden server para dos propositos
+  - Contiene uno omas archivos de configuracion.
+  - Contiene parametros de configuracion individuales.
+- Es usado comunmente para almacenar informacion no confidencial en el formato key-value.
+- Nos previene de la configuracion dificultosa de informacion en spec de los pods.
+- Un archivo ConfigMaps, puede ser con multiples key-values ya que es un mapa.
+- Para manejar y administrar informacion sensible se usa un recurso llamado secrets. Aunque tambien se puede con ConfigMaps, pero implica un riesgo.
+- El archivo configmap debe ser creado antes del pop, ya que este se referencia en la seccion spec.
+- `kubectl create configmap <map-name> <data-source>` crea un **ConfigMap**, donde se le especifica un nombre y un data-source que puede ser un directorio o un archivo (con `--from-file`), o un valor (con `--from-literal`).
+
+#### Aplicar nuestra configuracion especifica a un contenedor
+
+Existen 3 formas usando ConfigMaps dentro de los pods:
+
+- Archivos de configuracion.
+- Argumentos de la linea de comandos.
+- Variables de entorno.
