@@ -1129,8 +1129,105 @@ spec:
 
 #### Aplicar nuestra configuracion especifica a un contenedor
 
-Existen 3 formas usando ConfigMaps dentro de los pods:
+Existen 3 formas usando ConfigMaps dentro de los Pods:
 
-- Archivos de configuracion.
+- Archivos de configuracion (con `--from-file`).
 - Argumentos de la linea de comandos.
-- Variables de entorno.
+- Variables de entorno (con `--from-literal`).
+
+#### ConfigMap from Directory
+
+Usando varios archivos de un directorio.
+
+Contendido de los archivos a usar:
+
+- Archivo game.properties
+
+  ```json
+  enemies=aliens
+  lives=3
+  enemies.cheat=true
+  enemies.cheat.level=noGoodRotten
+  secret.code.passphrase=UUDDLRLRBABAS
+  secret.code.allowed=true
+  secret.code.lives=
+  ```
+
+- Archivo ui.properties
+
+  ```json
+  color.good=purple
+  color.bad=yellow
+  allow.textmode=true
+  how.nice.to.look=fairlyNice
+  ```
+
+- `kubectl create configmap game-config --from-file=.\kubernetes\configmaptest\` crea el ConfigMap especificando el nombre del ConfigMap y la ruta de los archivos de configuracion.
+
+#### ConfigMap from File
+
+Usando un unico archivo, ver el siguiente [tutorial](https://kubernetes.io/docs/tutorials/configuration/configure-redis-using-configmap/).
+
+Contendido de los archivos a usar:
+
+- Archivo redis-config:
+
+  ```conf
+  maxmemory 2mb
+  maxmemory-policy allkeys-lru
+  ```
+
+- Archivo para crear el po0d y asignarle la configuracion desde un archivo externo:
+
+  ```conf
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: redis
+  spec:
+    containers:
+    - name: redis
+      image: redis:5.0.4
+      volumeMounts:
+      - mountPath: /redis-master
+        name: config
+    volumes:
+      - name: config
+        configMap:
+          name: example-redis-config
+          items:
+          - key: redis-config
+            path: redis.conf
+  ```
+
+- Se necesita haber creado el config map con el comando `kubectl create configmap example-redis-config --from-file=.\redis-config`, **
+- Luego crear el pod con el comando `kubectl create -f .\kubernetes\configmap.yml`, **.\kubernetes\configmap.yml** es el directorio del archivo .yml del pod.
+- Verificar si se configuro el pod exitosamente con el comando `kubectl exec redis -- cat /redis-master/redis.conf`, **redis-master** es el volumen y **redis.conf** es el path.
+
+#### ConfigMap from Valores literales
+
+- Archivo de creacion del Pod:
+
+  ```yml
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: test-pod
+  spec:
+    containers:
+    - name: test-container
+      image: k8s.gcr.io/busybox
+      command: [ "/bin/sh", "-c", "env" ]
+      env:
+        - name: SPECIAL_LEVEL_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: special-config-map
+              key: special.how
+    restartPolicy: Never
+  ```
+
+- Este YAML básicamente configura un pod que imprime las variables de entorno en el shell y utiliza una ConfigMap para definir una de esas variables de entorno (SPECIAL_LEVEL_KEY). Esto es útil para proporcionar configuración a los contenedores dentro del pod sin tener que modificar el contenedor mismo.
+- `kubectl create configmap special-config-map --from-literal=special.how=very` para crear el configMap con la key-value **special.how=very**.
+- `kubectl apply -f .\kubernetes\configmap2.yml` para crear el pod. **.\kubernetes\configmap2.yml** es el archivo .yml de creacion del pod.
+- `kubectl logs test-pod | grep  SPECIAL` verifica la configuracion exitosa del configMap en el Pod. Use **Select-String** en vez de **grep** si esta en windows.
