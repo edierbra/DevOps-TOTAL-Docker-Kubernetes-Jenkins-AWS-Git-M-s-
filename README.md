@@ -1231,3 +1231,131 @@ Contendido de los archivos a usar:
 - `kubectl create configmap special-config-map --from-literal=special.how=very` para crear el configMap con la key-value **special.how=very**.
 - `kubectl apply -f .\kubernetes\configmap2.yml` para crear el pod. **.\kubernetes\configmap2.yml** es el archivo .yml de creacion del pod.
 - `kubectl logs test-pod | grep  SPECIAL` verifica la configuracion exitosa del configMap en el Pod. Use **Select-String** en vez de **grep** si esta en windows.
+
+## Seccion 29: Kuybernetes - Secrets
+
+- Es informacion sensible como nombres de usuario, contraseñas, tokens, etc.
+- Tecnicamente es un objeto de kubernetes que contiene una pequeña cantidad de informacion.
+- Busca reducir el riesgo de exponer accidentalmente informacion confidencial mientras realizamos deployment de pods.
+- Segun nuestros requerimientos, craremos y definiremos una configuracion especial - ***custom config***, dentro de la configuracion del pod antes de realizar la implementacion de deploymend del pod.
+- Cuando se crea un secret lo podremos i plementar en cualquier pod y las veces que querramos.
+- Son alamcenados dentro de la base de datos **etcd** en el kubernetes master.
+- Es una base de datos de key/values.
+- El limite maximo de un secret es de 1MB.
+- Existen varios tipos:
+  - Generico:
+    - Archivo (`--from-file`).
+    - directorio (`--from-file`).
+    - Valor literar referido a un par key/value (`--from-literal`).
+  - Registro de docker.
+  - TLS.
+
+### Como ingresar los secrets a un pod
+
+- Montando los secretos por volumenes, o exponiendolos como variables de entorno deltro del archivo pod.
+- Los secretos en kubernetes estan diseñados para ser especificamente dirigidos al nodo target donde el pod que demanda el secreto esta siendo ejecutado.
+- El secreto va a ser dirigido a un dodo especifico donde es requerido.
+- Cada secreto se almacena en un volumen **tempfs**. De esta manera el secreto no se escribe en el almacenamiento del disco.
+- Cuando el pod del que depende el secreto es eliminado, kubelet eliminara su copia local del secreto tambien.
+
+### Como ingresar los secretos a los pods
+
+- Pueden haber muchos contenedores en un pod, sin embargo cada contenedor tiene que realizar el requerimiento del secret volume en su propiedad interna **volumemounts** para que sea visible en ese contenedor.
+
+### Formas de crear secrets en kubernetes
+
+- `kubectl get secrets` ver los secrets creados.
+- `kubectl describe secret <secret name>` ver detalles de un secret.
+- `kubectl delete secret <secret name>` eliminar un secret.
+
+#### Por linea de comandos
+
+- Archivo **username.txt**:
+
+  ```txt
+  admin
+  ```
+
+- Archivo **passwordd.txt**:
+
+  ```txt
+  1f2d1e2e67df
+  ```
+
+- `kubectl create secret generic db-user-pass --from-file=.\kubernetes\username.txt --from-file=.\kubernetes\password.txtt` crear un secret generico con `--from-file`.
+
+#### Usando manifiest files, es la forma manual
+
+- Archivo **mysecret.yml**:
+
+  ```yml
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: mysecret
+  type: Opaque
+  data:
+    username: YWRtaW4=
+    password: MWYyZDFlMmU2N2Rm
+  ```
+  
+- data contiene pares key/value, donde value debe estar codificado en base64.
+- `kubectl apply -f .\kubernetes\mysecret.yml` crear el secret a partir del archivo **mysecret.yml**.
+
+### Introducir secrets en pods
+
+#### Mediante volumenes
+
+- Archivo mysecret-pod.yml:
+
+  ```yml
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: mypod
+  spec:
+    containers:
+    - name: mypod
+      image: redis
+      volumeMounts:
+      - name: foo
+        mountPath:  "/etc/foo"
+        readOnly: true
+    volumes:
+    - name: foo
+      secret:
+        secretName: mysecret
+  ```
+
+- `kubectl apply -f .\kubernetes\mysecret-pod.yml` crear el mysecret-pod mediante el archivo yaml. Recordar haber creado antes el secret.
+- `kubectl exec mypod -- ls /etc/foo` ver los secret creados.
+- `kubectl exec mypod -- cat /etc/foo/<key del secret>` ver el contenido de un secret mediante su key.
+
+#### Mediante variables de entorno
+
+- Archivo secret-env-pod.yml:
+
+  ```yml
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: secret-env-pod
+  spec:
+    containers:
+    - name: mycontainer
+      image: redis
+      env:
+      - name: SECRET_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: mysecret
+            key: username
+      - name: SECRET_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: mysecret
+            key: password
+    restartPolicy: Never
+  ```
+
+- `kubectl exec <pod name> env | grep  <secret key>` ver las variables de entorno del contenedor. Use **Select-String** en vez de **grep** si esta en windows.
