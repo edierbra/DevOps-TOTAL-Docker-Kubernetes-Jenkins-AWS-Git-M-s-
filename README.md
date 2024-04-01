@@ -1359,3 +1359,28 @@ Contendido de los archivos a usar:
   ```
 
 - `kubectl exec <pod name> env | grep  <secret key>` ver las variables de entorno del contenedor. Use **Select-String** en vez de **grep** si esta en windows.
+
+## Seccion 30: Kuybernetes - Aplicacion de microservicio
+
+### Descripcion
+
+- Descripcion de la aplkicacion: es una aplicacion de votacion. Se tendra una interfaz para votar y otra para ver los resultados.
+- Partes de la aplicaccion:
+  - vote-app: aplicacion web frontend desarrollada en python. Proporciona una interfaz para elegir entre gatos o perros.
+  - redis: los votos se almacenan en redis. Es decir va a ser la base de datos.
+  worker: aplicacion desarrollada en .NET Core o Java. El worker se encarga de tomar el nuevo voto y lo almacena en la base de datos de persistencia de nombre.
+  - db: en este caso PostgreSQL. Tendra una tabla donde estara el numero de votos para gato o perro.
+  - result-app: aplicacion desarrollada en Node.js que refleja los resultados en tiempo real. Lee los votos de la db y los muestra.
+- Estructura:
+  - Deployments:
+    - redis
+    - db
+    - vote-app
+    - result-app
+    - worker.
+  - Servicios:
+    - redis
+    - db
+    - vote-app
+    - result-app 
+- Se va a tener un deployment con 5 replicas y 5 pods tanto para vote-app y result-app.
