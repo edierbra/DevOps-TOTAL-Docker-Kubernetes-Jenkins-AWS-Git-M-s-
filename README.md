@@ -1382,5 +1382,274 @@ Contendido de los archivos a usar:
     - redis
     - db
     - vote-app
-    - result-app 
+    - result-app
 - Se va a tener un deployment con 5 replicas y 5 pods tanto para vote-app y result-app.
+
+### Creacion de deployments
+
+- Deployment **postgresdp.yml**
+
+  ```yml
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: db
+    labels:
+      app: app-votacion
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        name: db
+        app: app-votacion
+    template:
+      metadata:
+        name: db
+        labels:
+          name: db
+          app: app-votacion
+      spec:
+        containers:
+        - name: postgres
+          image: postgres:9.4
+          env:
+          - name:  POSTGRES_USER
+            value: postgres
+          - name:  POSTGRES_PASSWORD
+            value: postgres
+          - name:  POSTGRES_HOST_AUTH_METHOD
+            value: trust
+          ports:
+          - containerPort: 5432
+            name: postgres
+  ```
+
+- Deployment **redisdp.yml**
+
+  ```yml
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: redis
+    labels:
+      app: app-votacion
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        name: redis
+        app: app-votacion
+    template:
+      metadata:
+        name: redis
+        labels:
+          name: redis
+          app: app-votacion
+      spec:
+        containers:
+        - name: redis
+          image: redis
+          ports:
+          - containerPort: 6379
+            name: redis
+  ```
+
+- Deployment **workedp.yml**
+
+  ```yml
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: worker
+    labels:
+      app: app-votacion
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        name: worker
+        app: app-votacion
+    template:
+      metadata:
+        name: worker
+        labels:
+          name: worker
+          app: app-votacion
+      spec:
+        containers:
+        - name: worker
+          image: dockersamples/examplevotingapp_worker
+  ```
+  
+- Deployment **votedp.yml**
+
+  ```yml
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: vote
+    labels:
+      app: app-votacion
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        name: vote
+        app: app-votacion
+    template:
+      metadata:
+        name: vote
+        labels:
+          name: vote
+          app: app-votacion
+      spec:
+        containers:
+        - name: vote
+          image: dockersamples/examplevotingapp_vote
+          ports:
+          - containerPort: 80
+            name: vote
+  ```
+  
+- Deployment **resultdp.yml**
+
+  ```yml
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: result
+    labels:
+      app: app-votacion
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        name: result
+        app: app-votacion
+    template:
+      metadata:
+        name: result
+        labels:
+          name: result
+          app: app-votacion
+      spec:
+        containers:
+        - name: result
+          image: dockersamples/examplevotingapp_result
+          ports:
+          - containerPort: 80
+            name: result
+  ```
+
+### Creacion de services
+
+- Service **servicepostgres.yml**
+
+  ```yml
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: db
+    labels:
+      name: db
+      app: app-votacion
+  spec:
+    type: ClusterIP
+    ports:
+    - port: 5432
+      targetPort: 5432
+      name: "db-service"
+    selector:
+      name: db
+      app: app-votacion
+  ```
+
+- Service **serviceredis.yml**
+
+  ```yml
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: redis
+    labels:
+      name: redis
+      app: app-votacion
+  spec:
+    type: ClusterIP
+    ports:
+    - port: 6379
+      targetPort: 6379
+      name: "redis-service"
+    selector:
+      name: redis
+      app: app-votacion
+  ```
+
+- Service **serviceresult.yml**
+
+  ```yml
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: result
+    labels:
+      name: result
+      app: app-votacion
+  spec:
+    type: NodePort
+    ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 31001
+      name: "result-service"
+    selector:
+      name: result
+      app: app-votacion
+  ```
+
+- Service **servicevote.yml**
+
+  ```yml
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: vote
+    labels:
+      name: vote
+      app: app-votacion
+  spec:
+    type: NodePort
+    ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 31000
+      name: "vote-service"
+    selector:
+      name: vote
+      app: app-votacion
+  ```
+
+### Implementacion, testeo y escalado
+
+- `kubectl create namespace appvotacion` crea un nuevo namespace para la app.
+- `kubectl apply -f . --namespace=appvotacion` aplica todos los **.yml** del directorio.
+- `kubectl scale deployment vote --replicas=5 -n appvotacion` escalar el deployment **vote**.
+- `kubectl scale deployment result --replicas=5 -n appvotacion`escalar el deployment **result**.
+- `kubectl delete all --all -n appvotacion` elimina todo del namespace **appvotacion**.
+- `kubectl delete namespace appvotacion` elimina el namespace **appvotacion**.
+
+### Implementacion de la app en Google Cloud Platform
+
+#### Modificaciones a los archivos YAML
+
+- Cambiar el numero de replicas de **1** a **5** en los deployments **vote** y **result**.
+- Cambiar el tipo de servicio de **NodePort** a **LoadBalancer** en los servicios **vote** y **result**.
+
+#### Implementacion y testeo
+
+- Entrar a [Google Cloud Platform](https://console.cloud.google.com/kubernetes/) y crear un cluster en la opcion **Kubernetes Engine** del menu de opciones. Solo especificar el nombre al momento de crear el cluster, lo demas dejarlo por defecto.
+- Ir a las acciones del cluster y elegir la opcion **Conectar**.
+- Ejecutar en el **CLOUD SHELL** (terminal de Google Cloud Platform) el comando de de la opcion **Conectar**.
+- Clonar el repositorio con los archivos **.yml**.
+- Ejecutar los archivos **.yml** con el comando `kubectl apply -f .`
+- Ingresar en el navegador la **EXTERNAL-IP** de los servicios **vote** y **result**, y asi acceder a la aplicacion de votacion.
